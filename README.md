@@ -30,7 +30,7 @@ Things you may want to cover:
 | Column           | Type   | Options     |
 | ---------------- | ------ | ----------- |
 | nickname         | string | null: false |
-| email            | string | null: false |
+| email            | string | null: false, unique: true |
 | password         | string | null: false |
 | given_name       | string | null: false |
 | family_name      | string | null: false |
@@ -66,10 +66,25 @@ Things you may want to cover:
 - belongs_to       :user
 - has_one          :buyer
 - has_one_attached :image
-- validates_associated :image, presence: true
+<!-- - validates_associated :image, presence: true -->
 
 
-## buyers テーブル
+## buy_histories テーブル
+
+| Column  | Type      | Options     |
+| ------- | --------- | ----------- |
+| user    | reference | null: false, foreign_key: true |
+| good    | reference | null: false, foreign_key: true |
+
+
+### Association
+
+- belongs_to :user
+- belongs_to :good
+- has_ond :address
+
+
+## addresses テーブル
 
 | Column                | Type      | Options     |
 | --------------------- | --------- | ----------- |
@@ -79,11 +94,9 @@ Things you may want to cover:
 | address_house_number  | string    | null: false |
 | address_building      | string    |             |
 | tel_number            | string    | null: false |
-| user                  | reference | null: false, foreign_key: true |
-| good                  | reference | null: false, foreign_key: true |
+| buy_history           | reference | null: false, foreign_key: true |
 
 
 ### Association
 
-- belongs_to :user
-- belongs_to :good
+- belongs_to :buy_history
