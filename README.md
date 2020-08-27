@@ -41,7 +41,7 @@ Things you may want to cover:
 
 ### Association
 
-- has_many :buyers
+- has_many :buy_histories
 - has_many :goods
 
 
@@ -64,7 +64,7 @@ Things you may want to cover:
 ### Association
 
 - belongs_to       :user
-- has_one          :buyer
+- has_one          :buy_history
 - has_one_attached :image
 <!-- - validates_associated :image, presence: true -->
 
