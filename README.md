@@ -30,12 +30,12 @@ Things you may want to cover:
 | Column           | Type   | Options     |
 | ---------------- | ------ | ----------- |
 | nickname         | string | null: false |
-| email            | string | null: false, inclusion: {in: %@%}, uniqueness: true  |
-| password         | string | null: false, length: {minimum: 6}                    |
-| given_name       | string | null: false, format: {with: /\A[ぁ-んァ-ン一-龥]+\z/}  |
-| family_name      | string | null: false, format: {with: /\A[ぁ-んァ-ン一-龥]+\z/}  |
-| given_name_kana  | string | null: false, format: {with: /\A[ァ-ン]+\z/}           |
-| family_name_kana | string | null: false, format: {with: /\A[ァ-ン]+\z/}           |
+| email            | string | null: false |
+| password         | string | null: false |
+| given_name       | string | null: false |
+| family_name      | string | null: false |
+| given_name_kana  | string | null: false |
+| family_name_kana | string | null: false |
 | birth_day        | date   | null: false |
 
 
@@ -53,7 +53,7 @@ Things you may want to cover:
 | description          | text      | null: false |
 | category_id          | integer   | null: false |
 | status_id            | integer   | null: false |
-| price                | integer   | null: false, {greater_than_or_equal_to: 300, greater_than_or_equal_to: 9,999,999}  |
+| price                | integer   | null: false |
 | delivery_fee         | integer   | null: false |
 | origin_prefecture_id | integer   | null: false |
 | delivery_days_id     | integer   | null: false |
@@ -64,7 +64,7 @@ Things you may want to cover:
 ### Association
 
 - belongs_to       :user
-- has_one          :bayer
+- has_one          :buyer
 - has_one_attached :image
 - validates_associated :image, presence: true
 
@@ -73,12 +73,12 @@ Things you may want to cover:
 
 | Column                | Type      | Options     |
 | --------------------- | --------- | ----------- |
-| postal_code           | string    | null: false, format: {with: /\A\d{3}[-]\d{3}\z/} |
+| postal_code           | string    | null: false |
 | address_prefecture_id | integer   | null: false |
 | address_municipality  | string    | null: false |
 | address_house_number  | string    | null: false |
 | address_building      | string    |             |
-| tel_number            | string    | null: false, length: {maximum: 11} |
+| tel_number            | string    | null: false |
 | user                  | reference | null: false, foreign_key: true |
 | good                  | reference | null: false, foreign_key: true |
 
