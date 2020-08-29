@@ -12,5 +12,8 @@ class Good < ApplicationRecord
 
   extend ActiveHash::Associations::ActiveRecordExtensions
   belongs_to_active_hash :category
-  validates :category_id,          presence: true, numericality: { other_than: 1 }
+  validates :category_id, presence: true, numericality: { other_than: 1 }
+
+  belongs_to_active_hash :good_status
+  validates :status_id, presence: true, numericality: { other_than: 1 }
 end
