@@ -16,4 +16,7 @@ class Good < ApplicationRecord
 
   belongs_to_active_hash :good_status
   validates :status_id, presence: true, numericality: { other_than: 1 }
+
+  belongs_to_active_hash :fee_charger
+  validates :fee_charger_id, presence: true, numericality: { other_than: 1 }
 end
