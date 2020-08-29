@@ -22,4 +22,7 @@ class Good < ApplicationRecord
 
   belongs_to_active_hash :prefecture
   validates :origin_area_id, presence: true, numericality: { other_than: 1 }
+
+  belongs_to_active_hash :delivery_day
+  validates :delivery_days_id, presence: true, numericality: { other_than: 1 }
 end
