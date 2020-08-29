@@ -4,7 +4,7 @@ class GoodsController < ApplicationController
   end
 
   def new
-    
+    @good = Good.new()
   end
 
   def create
