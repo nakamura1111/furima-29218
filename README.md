@@ -54,7 +54,6 @@ Things you may want to cover:
 | category_id          | integer   | null: false |
 | status_id            | integer   | null: false |
 | price                | integer   | null: false |
-| delivery_fee         | integer   | null: false |
 | origin_prefecture_id | integer   | null: false |
 | delivery_days_id     | integer   | null: false |
 | fee_charger_id       | integer   | null: false |
