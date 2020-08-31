@@ -2,11 +2,10 @@ class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index]
 
   def index
-    
   end
 
   def new
-    @good = Good.new()
+    @good = Good.new
   end
 
   def create
@@ -19,17 +18,15 @@ class GoodsController < ApplicationController
 
   def profit_calc
     price = params.require(:price).to_i
-    profit = price*0.9;
-    sales_fee = price*0.1;
-    render json: {post: {profit: profit.to_i, sales_fee: sales_fee.to_i} }
+    profit = price * 0.9
+    sales_fee = price * 0.1
+    render json: { post: { profit: profit.to_i, sales_fee: sales_fee.to_i } }
   end
 
   private
-  
+
   def move_to_login
-    unless user_signed_in?
-      redirect_to(new_user_session_url)
-    end
+    redirect_to(new_user_session_url) unless user_signed_in?
   end
 
   def good_params
