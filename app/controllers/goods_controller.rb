@@ -17,6 +17,12 @@ class GoodsController < ApplicationController
     end
   end
 
+  def profit_calc
+    price = params.permit(:price)
+    sales_fee_ratio = 0.1.to_i
+    render :json, {post: {profit: price*(1.0-sales_fee_ratio), sale_fee: price*sales_fee_ratio} }
+  end
+
   private
   
   def move_to_login
