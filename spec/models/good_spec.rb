@@ -69,6 +69,11 @@ RSpec.describe Good, type: :model do
       @good.valid?
       expect(@good.errors.full_messages).to include('Price is not a number')
     end
+    it 'priceが整数でない場合、登録できない' do
+      @good.price = Faker::Number.decimal(l_digits: 7, r_digits: 3)
+      @good.valid?
+      expect(@good.errors.full_messages).to include('Price must be an integer')
+    end
     it 'priceが299だと登録できない' do
       @good.price = 299
       @good.valid?

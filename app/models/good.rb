@@ -4,7 +4,11 @@ class Good < ApplicationRecord
   validates :description,          presence: true, length: { maximum: 1000 }
   validates :category_id,          presence: true, numericality: { other_than: 1 }
   validates :status_id,            presence: true, numericality: { other_than: 1 }
-  validates :price,                presence: true, numericality: { greater_than_or_equal_to: 300, less_than: 10_000_000 }
+  validates :price,
+    presence: true,
+    numericality: {
+      only_integer: true, greater_than_or_equal_to: 300, less_than: 10_000_000
+    }
   validates :origin_prefecture_id, presence: true, numericality: { other_than: 1 }
   validates :delivery_days_id,     presence: true, numericality: { other_than: 1 }
   validates :fee_charger_id,       presence: true, numericality: { other_than: 1 }
