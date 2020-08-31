@@ -1,0 +1,2 @@
+module BlankSupport
+end
