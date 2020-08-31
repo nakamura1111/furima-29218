@@ -1,7 +1,7 @@
 class Good < ApplicationRecord
   # バリデーション
-  validates :name,                 presence: true
-  validates :description,          presence: true
+  validates :name,                 presence: true, length: { maximum: 40 }
+  validates :description,          presence: true, length: { maximum: 1000 }
   validates :category_id,          presence: true, numericality: { other_than: 1 }
   validates :status_id,            presence: true, numericality: { other_than: 1 }
   validates :price,                presence: true, numericality: { greater_than_or_equal_to: 300, less_than: 10000000 }
