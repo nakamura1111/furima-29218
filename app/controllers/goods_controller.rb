@@ -9,7 +9,8 @@ class GoodsController < ApplicationController
   end
 
   def create
-    if Good.create(good_params)
+    @good = Good.new(good_params)
+    if @good.save
       redirect_to root_path
     else
       render :new
