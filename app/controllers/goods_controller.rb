@@ -18,9 +18,10 @@ class GoodsController < ApplicationController
   end
 
   def profit_calc
-    price = params.permit(:price)
-    sales_fee_ratio = 0.1.to_i
-    render :json, {post: {profit: price*(1.0-sales_fee_ratio), sale_fee: price*sales_fee_ratio} }
+    price = params.require(:price).to_i
+    profit = price*0.9;
+    sales_fee = price*0.1;
+    render json: {post: {profit: profit.to_i, sales_fee: sales_fee.to_i} }
   end
 
   private
