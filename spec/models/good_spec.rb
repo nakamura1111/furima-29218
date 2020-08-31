@@ -76,12 +76,10 @@ RSpec.describe Good, type: :model do
     end
     it 'priceが300だと登録できる' do
       @good.price = 300
-      @good.valid?
       expect(@good).to be_valid
     end
     it 'priceが9,999,999だと登録できる' do
       @good.price = 9_999_999
-      @good.valid?
       expect(@good).to be_valid
     end
     it 'priceが10,000,000だと登録できない' do
