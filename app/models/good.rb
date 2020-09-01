@@ -15,6 +15,7 @@ class Good < ApplicationRecord
 
   # アソシエーション
   belongs_to :user
+  has_one :buy_history
   has_one_attached :image
 
   # ActiveHashのアソシエーション
