@@ -98,6 +98,12 @@ RSpec.describe Good, type: :model do
       @good.valid?
       expect(@good.errors.full_messages).to include('User must exist')
     end
+    # image
+    it 'imageが紐づいていないと登録できない' do
+      @good.image = nil
+      @good.valid?
+      expect(@good.errors.full_messages).to include("Image can't be blank")
+    end
     # 正常
     it 'すべてのデータがバリデーションの範囲内ならば登録できる' do
       expect(@good).to be_valid
