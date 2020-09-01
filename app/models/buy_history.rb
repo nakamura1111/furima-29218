@@ -1,8 +1,8 @@
 class BuyHistory < ApplicationRecord
-  # バリデーション
+  # バリデーション(なし)
 
   # アソシエーション
   belongs_to :user
-  belogns_to :good
-  has_one :address, presence: true
+  belongs_to :good
+  has_one :buyer
 end

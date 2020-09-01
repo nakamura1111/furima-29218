@@ -16,7 +16,7 @@ class GoodsController < ApplicationController
       render :new
     end
   end
-
+  # profit_calcアクション(売却時利益と手数料算出の非同期通信)
   def profit_calc
     price = params.require(:price).to_i
     profit = price * 0.9
