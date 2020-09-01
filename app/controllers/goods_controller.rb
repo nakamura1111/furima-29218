@@ -1,7 +1,7 @@
 class GoodsController < ApplicationController
-  before_action :move_to_login, except: [:index]
-
+  before_action :move_to_login, except: [:index, :show]
   def index
+    @goods = Good.all.order("created_at DESC")
   end
 
   def new
@@ -22,6 +22,10 @@ class GoodsController < ApplicationController
     profit = price * 0.9
     sales_fee = price * 0.1
     render json: { post: { profit: profit.to_i, sales_fee: sales_fee.to_i } }
+  end
+
+  def show
+    @good = Good.find(params[:id])
   end
 
   private
