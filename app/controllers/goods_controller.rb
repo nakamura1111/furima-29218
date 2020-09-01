@@ -2,6 +2,7 @@ class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index]
 
   def index
+    @goods = Good.all.order("created_at DESC")
   end
 
   def new
