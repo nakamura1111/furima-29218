@@ -128,23 +128,28 @@
 
       <%# 商品のインスタンス変数になにか入っている場合、中身のすべてを展開できるようにしましょう %>
       <li class='list'>
-        <%= link_to "#" do %>
+        <% @goods.each do |good| %>
+        <%= link_to good_path(good) do %>
         <div class='item-img-content'>
-          <%= image_tag "item-sample.png", class: "item-img" %>
+          <%= image_tag good.image.variant(resize:'500x500'), class: "item-img" %>
 
           <%# 商品が売れていればsold outの表示 %>
-          <div class='sold-out'>
+          <%
+=begin%>
+ <div class='sold-out'>
             <span>Sold Out!!</span>
-          </div>
+          </div> 
+<%
+=end%>
           <%# //商品が売れていればsold outの表示 %>
 
         </div>
         <div class='item-info'>
           <h3 class='item-name'>
-            <%= "商品名" %>
+            <%= good.name %>
           </h3>
           <div class='item-price'>
-            <span><%= "販売価格" %>円<br>(税込み)</span>
+            <span><%= good.price %>円<br>(税込み)</span>
             <div class='star-btn'>
               <%= image_tag "star.png", class:"star-icon" %>
               <span class='star-count'>0</span>
@@ -152,12 +157,15 @@
           </div>
         </div>
         <% end %>
+        <% end %>
       </li>
       <%# //商品のインスタンス変数になにか入っている場合、中身のすべてを展開できるようにしましょう %>
 
       <%# 商品がない場合のダミー %>
       <%# 商品がある場合は表示されないようにしましょう %>
-      <li class='list'>
+      <%
+=begin%>
+ <li class='list'>
         <%= link_to '#' do %>
         <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/mercarimaster/uploads/captured_image/content/10/a004.png", class: "item-img" %>
         <div class='item-info'>
@@ -173,7 +181,9 @@
           </div>
         </div>
         <% end %>
-      </li>
+      </li> 
+<%
+=end%>
       <%# //商品がある場合は表示されないようにしましょう %>
       <%# //商品がない場合のダミー %>
     </ul>
