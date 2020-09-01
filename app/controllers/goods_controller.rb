@@ -1,5 +1,5 @@
 class GoodsController < ApplicationController
-  before_action :move_to_login, except: [:index]
+  before_action :move_to_login, except: [:index, :show]
 
   def index
     @goods = Good.all.order("created_at DESC")
@@ -16,6 +16,10 @@ class GoodsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def show
+    @good = Good.find(params[:id])
   end
 
   def profit_calc
