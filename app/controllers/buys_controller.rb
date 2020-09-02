@@ -1,16 +1,17 @@
 class BuysController < ApplicationController
   before_action :move_to_login
+
   def index
     @buy_info = BuyInfo.new
     @pay_info = Credit.new
     @good = Good.find(params[:good_id])
+    move_to_root
   end
 
   def create
     @good = Good.find(params[:good_id])
     @buy_info = BuyInfo.new(buy_params)
     @pay_info = Credit.new(credit_params)
-    binding.pry
     if @buy_info.valid? && @pay_info.valid? && ENV["PAYJP_SECRET_KEY"] != nil                 # 自分で定義したsaveメソッドだと自動バリデーションは行ってくれないので、まずはバリデーションする。
       @buy_info.save
       @pay_info.save
@@ -24,6 +25,12 @@ class BuysController < ApplicationController
 
   def move_to_login
     redirect_to(new_user_session_url) unless user_signed_in?
+  end
+
+  def move_to_root
+    redirect_to(root_url) if (
+      current_user == @good.user || @good.buy_history != nil
+    )
   end
 
   def buy_params
