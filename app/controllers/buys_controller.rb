@@ -30,8 +30,7 @@ class BuysController < ApplicationController
     params.permit(
       :postal_code,:addr_prefecture_id, :addr_municipality,
       :addr_house_number, :addr_building, :tel_number,
-      :good_id
-    ).merge(user_id: current_user.id)
+    ).merge(user: current_user, good: @good)
   end
 
   def credit_params
