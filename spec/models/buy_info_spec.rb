@@ -10,7 +10,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it 'バリデーションができていれば登録できる' do
         expect(@buy_info).to be_valid
       end
-      it "住所（建物・部屋番号）がなくても登録できる" do
+      it '住所（建物・部屋番号）がなくても登録できる' do
         @buy_info.addr_building = nil
         expect(@buy_info).to be_valid
       end
@@ -25,20 +25,20 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it '数字の桁数が違うと登録できない' do
         @buy_info.postal_code = "#{Faker::Number.number(digits: 2)}-#{Faker::Number.number(digits: 4)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Postal code is invalid")
+        expect(@buy_info.errors.full_messages).to include('Postal code is invalid')
         @buy_info.postal_code = "#{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 5)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Postal code is invalid")
+        expect(@buy_info.errors.full_messages).to include('Postal code is invalid')
       end
       it 'ハイフンがないと登録できない' do
         @buy_info.postal_code = "#{Faker::Number.number(digits: 3)}#{Faker::Number.number(digits: 4)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Postal code is invalid")
+        expect(@buy_info.errors.full_messages).to include('Postal code is invalid')
       end
       it '数字以外があると登録できない' do
         @buy_info.postal_code = Faker::Lorem.paragraph_by_chars(number: 8)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Postal code is invalid")
+        expect(@buy_info.errors.full_messages).to include('Postal code is invalid')
       end
     end
     # address(prefecture)
@@ -46,20 +46,20 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it 'id が 1 だと登録できない' do
         @buy_info.addr_prefecture_id = Prefecture.first.id
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Addr prefecture must be other than 1")
+        expect(@buy_info.errors.full_messages).to include('Addr prefecture must be other than 1')
       end
     end
     # address(municipality)
-    context "住所（市町村区）が登録できないとき" do
-      it "空だと登録できない" do
+    context '住所（市町村区）が登録できないとき' do
+      it '空だと登録できない' do
         @buy_info.addr_municipality = nil
         @buy_info.valid?
         expect(@buy_info.errors.full_messages).to include("Addr municipality can't be blank")
       end
     end
     # address(house_number)
-    context "住所（番地）が登録できないとき" do
-      it "空だと登録できない" do
+    context '住所（番地）が登録できないとき' do
+      it '空だと登録できない' do
         @buy_info.addr_house_number = nil
         @buy_info.valid?
         expect(@buy_info.errors.full_messages).to include("Addr house number can't be blank")
@@ -67,21 +67,21 @@ RSpec.describe 'BuyInfoモデル', type: :model do
     end
     # address(building)はなし
     # tel_number
-    context "電話番号が登録できない時" do
-      it "空だと登録できない" do
+    context '電話番号が登録できない時' do
+      it '空だと登録できない' do
         @buy_info.tel_number = nil
         @buy_info.valid?
         expect(@buy_info.errors.full_messages).to include("Tel number can't be blank")
       end
-      it "12桁以上だと登録できない" do
+      it '12桁以上だと登録できない' do
         @buy_info.tel_number = Faker::Number.number(digits: 12)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Tel number is too long (maximum is 11 characters)")
+        expect(@buy_info.errors.full_messages).to include('Tel number is too long (maximum is 11 characters)')
       end
-      it "数字以外が入っていると登録できない" do
+      it '数字以外が入っていると登録できない' do
         @buy_info.tel_number = Faker::Lorem.characters(number: 11)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Tel number is not a number")
+        expect(@buy_info.errors.full_messages).to include('Tel number is not a number')
       end
     end
     # user_id

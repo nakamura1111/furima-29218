@@ -1,7 +1,7 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show]
   def index
-    @goods = Good.all.order("created_at DESC")
+    @goods = Good.all.order('created_at DESC')
   end
 
   def new
@@ -16,6 +16,7 @@ class GoodsController < ApplicationController
       render :new
     end
   end
+
   # profit_calcアクション(売却時利益と手数料算出の非同期通信)
   def profit_calc
     price = params.require(:price).to_i
