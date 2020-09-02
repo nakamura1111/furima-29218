@@ -5,12 +5,12 @@ class BuysController < ApplicationController
   end
 
   def create
+    @good = Good.find(params[:good_id])
     @buy_info = BuyInfo.new(buy_params)
     if @buy_info.valid?                 # 自分で定義したsaveメソッドだと自動バリデーションは行ってくれないので、まずはバリデーションする。
       @buy_info.save
       redirect_to root_path
     else
-      @good = Good.find(params[:good_id])   # renderによってindexに遷移した時用のデータ
       render :index
     end
   end
@@ -25,7 +25,7 @@ class BuysController < ApplicationController
     params.permit(
       :postal_code,:addr_prefecture_id, :addr_municipality,
       :addr_house_number, :addr_building, :tel_number,
-      :good_id
-    ).merge(user_id: current_user.id)
+      :good_id, :token
+    ).merge(user_id: current_user.id, price: @good.price)
   end
 end
