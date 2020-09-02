@@ -6,8 +6,6 @@ const pay = () => {
   form.addEventListener("submit", (e) => {
     // フォームをサーバサイドに送る前にトークン生成を行うため、処理のキャンセルを行う
     e.preventDefault();
-    debugger
-
     // const formResult = document.getElementById("charge-form");
     const formData = new FormData(form);
     // カード情報を変数に入力

@@ -7,7 +7,7 @@ class BuysController < ApplicationController
   def create
     @good = Good.find(params[:good_id])
     @buy_info = BuyInfo.new(buy_params)
-    if @buy_info.valid?                 # 自分で定義したsaveメソッドだと自動バリデーションは行ってくれないので、まずはバリデーションする。
+    if @buy_info.valid? && ENV["PAYJP_SECRET_KEY"] != nil                 # 自分で定義したsaveメソッドだと自動バリデーションは行ってくれないので、まずはバリデーションする。
       @buy_info.save
       redirect_to root_path
     else
