@@ -4,7 +4,7 @@
 <div class="item-show">
   <div class="item-box">
     <h2 class="name">
-      <%= "商品名" %>
+      <%= "【商品名】#{@good.name}" %>
     </h2>
     <div class='item-img-content'>
       <%= image_tag @good.image.variant(resize:'500x500') ,class:"item-box-img" %>
@@ -26,48 +26,46 @@
     </div>
 
     <%# ログインしているユーザと出品しているユーザが同一人物である時、商品の編集と削除を表示にしましょう%>
-    <%# if current_user == @good.user %>
+    <% if current_user == @good.user %>
     <%= link_to '商品の編集', "#", method: :get, class: "item-red-btn" %>
     <p class='or-text'>or</p>
     <%= link_to '削除', "#", method: :delete, class:'item-destroy' %>
-
-    <%# elsif  %>
-
     <%# 商品が売れていない場合はこちらを表示しましょう %>
+    <% elsif @good.buy_history == nil %>
     <%= link_to '購入画面に進む', good_buys_path(@good) ,class:"item-red-btn"%>
     <%# //商品が売れていない場合はこちらを表示しましょう %>
-    <%# end %>
+    <% end %>
 
     <%# // ログインしているユーザと出品しているユーザが同一人物である時、商品の編集と削除を表示にしましょう %>
 
     <div class="item-explain-box">
-      <span><%= "商品説明" %></span>
+      <span><%= "【商品説明】#{@good.description}" %></span>
     </div>
     <table class="detail-table">
       <tbody>
         <tr>
           <th class="detail-item">出品者</th>
-          <td class="detail-value"><%= "出品者名" %></td>
+          <td class="detail-value"><%= @good.user.nickname %></td>
         </tr>
         <tr>
           <th class="detail-item">カテゴリー</th>
-          <td class="detail-value"><%= "カテゴリー名" %></td>
+          <td class="detail-value"><%= Category.find(@good.category_id).name %></td>
         </tr>
         <tr>
           <th class="detail-item">商品の状態</th>
-          <td class="detail-value"><%= "商品の状態" %></td>
+          <td class="detail-value"><%= GoodStatus.find(@good.status_id).name %></td>
         </tr>
         <tr>
           <th class="detail-item">配送料の負担</th>
-          <td class="detail-value"><%= "発送料の負担" %></td>
+          <td class="detail-value"><%= FeeCharger.find(@good.fee_charger_id).name %></td>
         </tr>
         <tr>
           <th class="detail-item">発送元の地域</th>
-          <td class="detail-value"><%= "発送元の地域" %></td>
+          <td class="detail-value"><%= Prefecture.find(@good.origin_prefecture_id).name %></td>
         </tr>
         <tr>
           <th class="detail-item">発送日の目安</th>
-          <td class="detail-value"><%= "発送日の目安" %></td>
+          <td class="detail-value"><%= DeliveryDay.find(@good.delivery_days_id).name %></td>
         </tr>
       </tbody>
     </table>
@@ -106,7 +104,7 @@
       後ろの商品 ＞
     </a>
   </div>
-  <a href="#" class='another-item'><%= "商品のカテゴリー名" %>をもっと見る</a>
+  <a href="#" class='another-item'><%= Category.find(@good.category_id).name %>カテゴリーの商品をもっと見る</a>
 </div>
 
 <%= render "shared/footer" %>
