@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   root "goods#index"
   resources :goods, only: [:index, :new, :create, :show] do
     resources :buys, only: [:index, :create]
-    # good#profit_calcアクション(売却時利益と手数料算出の非同期通信)
     collection do
       get 'profit_calc'
     end

@@ -1,5 +1,6 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show]
+
   def index
     @goods = Good.all.order('created_at DESC')
   end
