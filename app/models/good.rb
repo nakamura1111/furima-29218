@@ -15,8 +15,8 @@ class Good < ApplicationRecord
 
   # アソシエーション
   belongs_to :user
-  has_one :buy_history,   dependent: :destroy
-  has_one_attached :image,   dependent: :destroy
+  has_one :buy_history, dependent: :destroy
+  has_one_attached :image, dependent: :destroy
 
   # ActiveHashのアソシエーション
   extend ActiveHash::Associations::ActiveRecordExtensions

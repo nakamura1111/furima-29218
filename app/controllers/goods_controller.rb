@@ -28,13 +28,10 @@ class GoodsController < ApplicationController
   end
 
   def show
-    
   end
 
   def destroy
-    if current_user == @good.user
-      @good.destroy
-    end
+    @good.destroy if current_user == @good.user
     redirect_to root_path
   end
 
@@ -53,6 +50,6 @@ class GoodsController < ApplicationController
   end
 
   def current_good
-    @good = Good.find( params[:id] )
+    @good = Good.find(params[:id])
   end
 end
