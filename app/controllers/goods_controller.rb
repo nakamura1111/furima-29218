@@ -31,8 +31,11 @@ class GoodsController < ApplicationController
   end
 
   def destroy
-    @good.destroy if current_user == @good.user
-    redirect_to root_path
+    if current_user == @good.user && @good.destroy 
+      redirect_to root_path
+    else
+      render :show
+    end
   end
 
   private
