@@ -4,5 +4,5 @@ class BuyHistory < ApplicationRecord
   # アソシエーション
   belongs_to :user
   belongs_to :good
-  has_one :buyer
+  has_one :buyer,   dependent: :destroy
 end
