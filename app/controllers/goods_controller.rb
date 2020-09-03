@@ -30,6 +30,15 @@ class GoodsController < ApplicationController
     @good = Good.find(params[:id])
   end
 
+  def destroy
+    @good = Good.find(params[:id])
+    if current_user == @good.user
+      @good.destroy
+    end
+    binding.pry
+    redirect_to root_path
+  end
+
   private
 
   def move_to_login
