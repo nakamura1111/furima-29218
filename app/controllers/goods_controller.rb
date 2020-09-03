@@ -1,5 +1,5 @@
 class GoodsController < ApplicationController
-  before_action :move_to_login, except: [:index, :show]
+#  before_action :move_to_login, except: [:index, :show]
 
   def index
     @goods = Good.all.order('created_at DESC')
@@ -26,9 +26,9 @@ class GoodsController < ApplicationController
     render json: { post: { profit: profit.to_i, sales_fee: sales_fee.to_i } }
   end
 
-  def show
-    @good = Good.find(params[:id])
-  end
+  # def show
+  #   @good = Good.find(params[:id])
+  # end
 
   private
 
