@@ -134,13 +134,11 @@
           <%= image_tag good.image.variant(resize:'500x500'), class: "item-img" %>
 
           <%# 商品が売れていればsold outの表示 %>
-          <%
-=begin%>
- <div class='sold-out'>
+          <% if good.buy_history != nil %>
+          <div class='sold-out'>
             <span>Sold Out!!</span>
-          </div> 
-<%
-=end%>
+          </div>
+          <% end %>
           <%# //商品が売れていればsold outの表示 %>
 
         </div>

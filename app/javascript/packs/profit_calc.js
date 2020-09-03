@@ -18,6 +18,10 @@ function profit_calc(){
   XHR.send();
   // レスポンスが帰ってきたら、
   XHR.onload = () => {
+    if ( XHR.status != 200 ) {
+      alert(`Error ${XHR.status}: ${XHR.statusText}`);
+      return null;
+    }
     const profit = document.getElementById("profit");
     const item = XHR.response.post;
     const tax = document.getElementById("add-tax-price");
@@ -27,5 +31,4 @@ function profit_calc(){
   }
 }
 
-window.addEventListener("load", profit_calc)      // 誤入力時にフォームに値が入っていた場合の初期設定
 window.setInterval(input_price, 1000)

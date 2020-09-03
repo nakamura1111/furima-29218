@@ -80,18 +80,18 @@ Things you may want to cover:
 
 - belongs_to :user
 - belongs_to :good
-- has_ond :address
+- has_ond :buyer
 
 
-## addresses テーブル
+## buyers テーブル
 
 | Column                | Type      | Options     |
 | --------------------- | --------- | ----------- |
 | postal_code           | string    | null: false |
-| address_prefecture_id | integer   | null: false |
-| address_municipality  | string    | null: false |
-| address_house_number  | string    | null: false |
-| address_building      | string    |             |
+| addr_prefecture_id         | integer   | null: false |
+| addr_municipality          | string    | null: false |
+| addr_house_number          | string    | null: false |
+| addr_building              | string    |             |
 | tel_number            | string    | null: false |
 | buy_history           | reference | null: false, foreign_key: true |
 
