@@ -39,13 +39,18 @@ class GoodsController < ApplicationController
   end
 
   def edit
-    
+    redirect_to(root_url) unless current_user == @good.user
   end
 
   def update
-    redirect_to action: "show", id: @good.id
+    params[:image] = @good.image  if params[:image] == nil
+    binding.pry
+    if @good.update(good_params)
+      redirect_to action: "show", id: @good.id
+    else
+      render :edit
+    end
   end
-  
 
   private
 
@@ -64,4 +69,5 @@ class GoodsController < ApplicationController
   def current_good
     @good = Good.find(params[:id])
   end
+
 end
