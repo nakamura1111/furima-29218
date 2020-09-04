@@ -1,6 +1,6 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show]
-  before_action :current_good,  only: [:show, :destroy]
+  before_action :current_good,  only: [:show, :destroy, :edit, :update]
 
   def index
     @goods = Good.all.order('created_at DESC')
@@ -37,6 +37,15 @@ class GoodsController < ApplicationController
       render :show
     end
   end
+
+  def edit
+    
+  end
+
+  def update
+    
+  end
+  
 
   private
 
