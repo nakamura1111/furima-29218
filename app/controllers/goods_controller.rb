@@ -43,7 +43,7 @@ class GoodsController < ApplicationController
   end
 
   def update
-    
+    redirect_to action: "show", id: @good.id
   end
   
 
