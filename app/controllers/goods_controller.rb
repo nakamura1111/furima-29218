@@ -44,7 +44,6 @@ class GoodsController < ApplicationController
 
   def update
     params[:image] = @good.image  if params[:image] == nil
-    binding.pry
     if @good.update(good_params)
       redirect_to action: "show", id: @good.id
     else
