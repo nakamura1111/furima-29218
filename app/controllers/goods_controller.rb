@@ -1,5 +1,6 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show]
+  before_action :current_good,  only: [:show, :destroy]
 
   def index
     @goods = Good.all.order('created_at DESC')
@@ -27,7 +28,14 @@ class GoodsController < ApplicationController
   end
 
   def show
-    @good = Good.find(params[:id])
+  end
+
+  def destroy
+    if current_user == @good.user && @good.destroy
+      redirect_to root_path
+    else
+      render :show
+    end
   end
 
   private
@@ -42,5 +50,9 @@ class GoodsController < ApplicationController
       :status_id, :price, :origin_prefecture_id,
       :delivery_days_id, :fee_charger_id, :image
     ).merge(user_id: current_user.id)
+  end
+
+  def current_good
+    @good = Good.find(params[:id])
   end
 end
