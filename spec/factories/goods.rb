@@ -9,5 +9,6 @@ FactoryBot.define do
     delivery_days_id     { DeliveryDay.where(id: 2..).sample.id }
     fee_charger_id       { FeeCharger.where(id: 2..).sample.id }
     association :user
+    image                { Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/hero.jpg"), 'image/jpg') }
   end
 end

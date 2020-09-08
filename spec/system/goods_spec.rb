@@ -2,46 +2,109 @@ require 'rails_helper'
 
 RSpec.describe "商品出品機能", type: :system do
   before do
-    
+    @user = FactoryBot.create(:user)
+    @good = FactoryBot.build(:good)
+    @good.user = @user
   end
   context "商品が出品できるとき" do
-    it "指定通りに入力フォームを記入した場合出品できる" do
-
+    it "ログイン状態で指定通りに入力フォームを記入した場合出品できる" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      fill_in_new_good(@good)
+      # 登録ボタンを押すと、出品情報がDBに登録されることを確認
+      expect{
+        find('input[name="commit"]').click
+      }.to change{ Good.count }.by(1)
+      # トップページに遷移していることを確認
+      expect(current_path).to eq(root_path)
     end
   end
   context "商品が出品できないとき" do
     it "指定通りに入力フォームを記入しなかった場合出品できない" do
-      
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力をしない
+      # 登録ボタンを押すと、出品情報がDBに登録されることを確認
+      expect{
+        find('input[name="commit"]').click
+      }.to change{ Good.count }.by(0)
+      # 出品画面に遷移していることを確認
+      expect(current_path).to eq(goods_path)
     end
     it "ログインしていないユーザは出品ページへ遷移できない" do
-      
+      # トップページに遷移する
+      visit root_path
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # ログインページへ遷移していることを確認
+      expect(current_path).to eq(new_user_session_path)
     end
   end
-  it "価格を入力するとそれに応じた利益と手数料が表示される" do
-    
+  context "利益と手数料が表示されるとき（非同期通信）" do
+    it "価格を入力するとそれに応じた利益と手数料が表示される" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 価格入力フォームのイベントが発火できるようになるための準備まで待つ
+      sleep(3)
+      # 商品価格の入力
+      fill_in 'item-price', with: @good.price
+      # 利益と手数料が表示されていることを確認
+      expect(page).to have_selector("#add-tax-price", text: (@good.price*0.1).to_i)     # id指定による表示の確認
+      expect(page).to have_selector("#profit", text: (@good.price*0.9).to_i)
+    end
   end
 end
 
 RSpec.describe "商品一覧表示機能", type: :system do
   before do
-    
+    create_good
   end
-  context "商品一覧を見られるとき" do
+  context "商品一覧画面を見られるとき" do
     it "ログアウト状態でも商品一覧ページに遷移できる" do
-      
+      # トップページに遷移
+      visit root_path
+      # 商品一覧ページへ遷移していることを確認
+      expect(current_path).to eq(root_path)
     end
   end
   context "商品一覧画面で表示されるもの" do
     it "画像・価格・商品名が表示されている" do
-
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 画像・価格・商品名が表示されているか確認
+      expect(page).to have_selector("img[src$='hero.jpg']")                   # 画像の名前を含んでいるか確認している　セレクタ「.item-img」 ファイル名「#{@image.original_filename}」
+      expect(page).to have_selector("div.item-price", text: "#{@good.price}円\n(税込み)\n0")
+      expect(page).to have_selector("h3.item-name", text: @good.name)
     end
     it "売却済み商品の場合「sold out」が表示されている" do
-      
+      # 購入済み商品の作成
+      create_buy
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 「sold out」が表示されているか確認
+      expect(page).to have_selector(".sold-out")
     end
   end
   context "商品一覧画面で表示されないもの" do
     it "売却済み商品でない場合「sold out」が表示されない" do
-
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 「sold out」が表示されているか確認
+      expect(page).to have_no_selector(".sold-out")
     end
   end
 end

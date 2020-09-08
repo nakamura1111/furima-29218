@@ -32,3 +32,9 @@ function profit_calc(){
 }
 
 window.setInterval(input_price, 1000)
+
+// window.addEventListener("load",function(){
+//   /////
+//   input_price
+
+// })
