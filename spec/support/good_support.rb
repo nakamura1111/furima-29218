@@ -23,4 +23,15 @@ module GoodSupport
     #   image: @image
     # )
   end
+  # imageの表示は含まれない
+  def show_good(good)
+    expect(find('h2.name').text).to include("#{good.name}")
+    expect(find('.item-price').text).to include("#{good.price}")
+    expect(all('.detail-value')[0].text).to eq(good.user.nickname)
+    expect(all('.detail-value')[1].text).to eq(Category.find(good.category_id).name)
+    expect(all('.detail-value')[2].text).to eq(GoodStatus.find(good.status_id).name)
+    expect(all('.detail-value')[3].text).to eq(FeeCharger.find(good.fee_charger_id).name)
+    expect(all('.detail-value')[4].text).to eq(Prefecture.find(good.origin_prefecture_id).name)
+    expect(all('.detail-value')[5].text).to eq(DeliveryDay.find(good.delivery_days_id).name)
+  end
 end
