@@ -13,6 +13,10 @@ module UserSupport
     select user.birth_day.day, from: "user[birth_day(3i)]"
   end
 
+  def create_user
+    return FactoryBot.create(:user)
+  end
+
   def login_user(user)
       visit new_user_session_path
       fill_in('email', with: user.email)

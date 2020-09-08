@@ -12,7 +12,7 @@ module GoodSupport
   end
   
   def create_good
-    @good = FactoryBot.create(:good)
+    return FactoryBot.create(:good)
     # @good = FactoryBot.build(:good)
     # @image_path = Rails.root.join("spec/fixtures/hero.jpg")
     # @image = fixture_file_upload(@image_path)

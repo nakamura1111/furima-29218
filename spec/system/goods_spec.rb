@@ -71,7 +71,7 @@ end
 
 RSpec.describe "商品一覧表示機能", type: :system do
   before do
-    create_good
+    @good = create_good
   end
   context "商品一覧画面を見られるとき" do
     it "ログアウト状態でも商品一覧ページに遷移できる" do
@@ -103,7 +103,7 @@ RSpec.describe "商品一覧表示機能", type: :system do
     it "売却済み商品でない場合「sold out」が表示されない" do
       # ログインする（トップページに遷移していることを確認済み）
       login_user(@good.user)
-      # 「sold out」が表示されているか確認
+      # 「sold out」が表示されていないことを確認
       expect(page).to have_no_selector(".sold-out")
     end
   end
@@ -111,42 +111,127 @@ end
 
 RSpec.describe "商品詳細表示機能", type: :system do
   before do
-    
+    @good = create_good
   end
   context "商品詳細を見られるとき" do
     it "ログアウト状態でも商品詳細ページに遷移できる" do
-      
+      # トップページに遷移
+      visit root_path
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
     end
   end
   context "商品詳細画面で表示されるもの" do
     it "商品の登録情報が表示されている" do
-
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 商品情報が表示されていることを確認
+      expect(page).to have_selector("h2.name", text: "【商品名】#{@good.name}")
+      expect(page).to have_selector(".item-box-img[src$='hero.jpg']")
+      expect(page).to have_selector(".item-price", text: "¥ #{@good.price}")
+      expect(all('.detail-value')[0].text).to eq(@good.user.nickname)
+      expect(all('.detail-value')[1].text).to eq(Category.find(@good.category_id).name)
+      expect(all('.detail-value')[2].text).to eq(GoodStatus.find(@good.status_id).name)
+      expect(all('.detail-value')[3].text).to eq(FeeCharger.find(@good.fee_charger_id).name)
+      expect(all('.detail-value')[4].text).to eq(Prefecture.find(@good.origin_prefecture_id).name)
+      expect(all('.detail-value')[5].text).to eq(DeliveryDay.find(@good.delivery_days_id).name)
     end
     it "売却済み商品は「sold out」が表示されている" do
-      
+      # 購入済み商品の作成
+      @buyer = create_buy
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@buyer.buy_history.good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@buyer.buy_history.good))
+      # 「sold out」が表示されているか確認
+      expect(page).to have_selector(".sold-out")
     end
     it "出品者は、商品の編集・削除のリンクが踏める" do
-      
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の編集・削除のリンクがあるか確認
+      expect(page).to have_link("商品の編集", href: edit_good_path(@good))
+      expect(page).to have_link("削除", href: good_path(@good))
     end
     it "出品者でないユーザは、商品購入のリンクが踏める" do
-      
+      # 出品者でないユーザの作成
+      @login_user = create_user
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@login_user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の編集・削除のリンクがあるか確認
+      expect(page).to have_link("購入画面に進む", href: good_buys_path(@good))
     end
     it "未ログイン者は、商品購入のリンクが踏める" do
-      
+      # トップページに遷移
+      visit root_path
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の編集・削除のリンクがあるか確認
+      expect(page).to have_link("購入画面に進む", href: good_buys_path(@good))
     end
   end
   context "商品詳細画面で表示されないもの" do
     it "未売却の商品は「sold out」が表示されていない" do
-      
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 「sold out」が表示されていないことを確認
+      expect(page).to have_no_selector(".sold-out")
     end
     it "出品者は、商品購入のリンクが踏めない" do
-      
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の購入のリンクがないことを確認
+      expect(page).to have_no_link("購入画面に進む", href: good_buys_path(@good))
     end
     it "出品者でないユーザは、商品の編集・削除のリンクが踏めない" do
-      
+      # 出品者でないユーザの作成
+      @login_user = create_user
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@login_user)
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の編集・削除のリンクがないことを確認
+      expect(page).to have_no_link("商品の編集", href: edit_good_path(@good))
+      expect(page).to have_no_link("削除", href: good_path(@good))
     end
     it "未ログイン者は、商品の編集・削除のリンクが踏めない" do
-      
+      # トップページに遷移
+      visit root_path
+      # 商品情報をクリック
+      find("div.item-price", text: "#{@good.price}円\n(税込み)\n0").click
+      # 商品詳細ページへ遷移することを確認
+      expect(current_path).to eq(good_path(@good))
+      # 出品商品の編集・削除のリンクがないことを確認
+      expect(page).to have_no_link("商品の編集", href: edit_good_path(@good))
+      expect(page).to have_no_link("削除", href: good_path(@good))
     end
   end
 end
@@ -173,33 +258,33 @@ RSpec.describe "商品削除機能", type: :system do
   end  
 end
 
-RSpec.describe "商品編集機能", type: :system do
-  before do
+# RSpec.describe "商品編集機能", type: :system do
+#   before do
     
-  end
-  context "商品編集ができるとき" do
-    it "出品者は商品編集ページに遷移できる" do
+#   end
+#   context "商品編集ができるとき" do
+#     it "出品者は商品編集ページに遷移できる" do
       
-    end
-    it "全ての情報を変更した場合、変更できる" do
+#     end
+#     it "全ての情報を変更した場合、変更できる" do
       
-    end
-    it "画像情報を入力しない場合、画像情報はそのままで他の要素は変更できる" do
+#     end
+#     it "画像情報を入力しない場合、画像情報はそのままで他の要素は変更できる" do
       
-    end
-    it "何も変更しなかった場合、元の情報のまま更新される" do
+#     end
+#     it "何も変更しなかった場合、元の情報のまま更新される" do
       
-    end
-  end
-  context "商品編集ができないとき" do
-    it "出品者でないユーザは編集できない" do
+#     end
+#   end
+#   context "商品編集ができないとき" do
+#     it "出品者でないユーザは編集できない" do
       
-    end
-    it "未ログインユーザは編集できない" do
+#     end
+#     it "未ログインユーザは編集できない" do
       
-    end
-    it "既に売れた商品は編集できない" do
+#     end
+#     it "既に売れた商品は編集できない" do
       
-    end
-  end
-end
+#     end
+#   end
+# end

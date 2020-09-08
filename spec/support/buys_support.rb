@@ -10,7 +10,7 @@ module BuySupport
   #   fill_in 'item-price', with: good.price
   # end
   def create_buy
-    @buyer = FactoryBot.create(:buyer)
+    return FactoryBot.create(:buyer)
     # @buy_info = FactoryBot.create(:buy_info)
     # @buy_info = FactoryBot.build(:buy_info)
     # # buy_infoレコードの作成
