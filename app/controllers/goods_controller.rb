@@ -39,7 +39,7 @@ class GoodsController < ApplicationController
   end
 
   def edit
-    redirect_to(root_url) unless current_user == @good.user
+    redirect_to(root_url) unless (current_user == @good.user && @good.buy_history == nil)
   end
 
   def update
