@@ -1,9 +1,9 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show]
-  before_action :current_good,  only: [:show, :destroy]
+  before_action :current_good,  only: [:show, :destroy, :edit, :update]
 
   def index
-    @goods = Good.all.order('created_at DESC')
+    @goods = Good.all.order('created_at DESC').includes(:user)
   end
 
   def new
@@ -38,6 +38,19 @@ class GoodsController < ApplicationController
     end
   end
 
+  def edit
+    redirect_to(root_url) unless (current_user == @good.user && @good.buy_history == nil)
+  end
+
+  def update
+    params[:image] = @good.image  if params[:image] == nil
+    if @good.update(good_params)
+      redirect_to action: "show", id: @good.id
+    else
+      render :edit
+    end
+  end
+
   private
 
   def move_to_login
@@ -55,4 +68,5 @@ class GoodsController < ApplicationController
   def current_good
     @good = Good.find(params[:id])
   end
+
 end

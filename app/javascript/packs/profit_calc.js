@@ -10,6 +10,7 @@ function input_price(){
 }
 
 function profit_calc(){
+  // ここで計算できるから、リファクタリングを行う
   // リクエスト情報の作成
   const price = document.getElementById("item-price");
   const XHR = new XMLHttpRequest();
@@ -32,3 +33,9 @@ function profit_calc(){
 }
 
 window.setInterval(input_price, 1000)
+
+// window.addEventListener("load",function(){
+//   /////
+//   input_price
+
+// })
