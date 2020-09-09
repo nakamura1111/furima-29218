@@ -1,14 +1,17 @@
 module BuySupport
-  # def fill_in_new_good(good)
-  #   fill_in 'item-name', with: good.name
-  #   fill_in 'item-info', with: good.description
-  #   select Category.find(good.category_id).name, from: "good[category_id]"
-  #   select GoodStatus.find(good.status_id).name, from: "good[status_id]"
-  #   select FeeCharger.find(good.fee_charger_id).name, from: "good[fee_charger_id]"
-  #   select Prefecture.find(good.origin_prefecture_id).name, from: "good[origin_prefecture_id]"
-  #   select DeliveryDay.find(good.delivery_days_id).name, from: "good[delivery_days_id]"
-  #   fill_in 'item-price', with: good.price
-  # end
+  def fill_in_new_buy(buyer)
+    fill_in 'card-number', with: 4_242_424_242_424_242
+    fill_in 'card-exp-month', with: Date.today.month
+    fill_in 'card-exp-year', with: ( Date.today.year + 1 ) % 100      # カード有効期限を一年後に設定
+    fill_in 'card-cvc', with: 123
+    fill_in 'postal-code', with: buyer.postal_code
+    select Prefecture.find(buyer.addr_prefecture_id).name, from: "addr_prefecture_id"
+    fill_in 'city', with: buyer.addr_municipality
+    fill_in 'addresses', with: buyer.addr_house_number
+    fill_in 'building', with: buyer.addr_building
+    fill_in 'phone-number', with: buyer.tel_number
+  end
+
   def create_buy
     return FactoryBot.create(:buyer)
     # @buy_info = FactoryBot.create(:buy_info)

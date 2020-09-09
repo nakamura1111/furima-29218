@@ -13,7 +13,7 @@ class BuysController < ApplicationController
     @buy_info = BuyInfo.new(buy_params)
     @pay_info = Credit.new(credit_params)
     # 自作定義のsaveメソッドはバリデーションを行ってくれないので、バリデーションで条件分岐
-    if @buy_info.valid? && @pay_info.valid? && !ENV['PAYJP_SECRET_KEY'].nil?
+    if @buy_info.valid? && @pay_info.valid?
       @pay_info.save
       @buy_info.save
       redirect_to root_path
