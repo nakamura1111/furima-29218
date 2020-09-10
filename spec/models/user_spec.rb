@@ -177,6 +177,12 @@ RSpec.describe User, type: :model do
     # 正常
     it '条件に合う入力を行っていれば登録できる' do
       expect(@user).to be_valid
+      users = FactoryBot.create_list(:user, 30)
+      users.each do |user|
+        if !(expect(user).to be_valid)
+          puts user
+        end
+      end
     end
   end
 end

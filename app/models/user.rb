@@ -5,7 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   validates :nickname,         presence: true
-  validates :email,            presence: true, uniqueness: true
+  # uniquenessについて、Rails6.1にする場合、読んで欲しい、https://qiita.com/jnchito/items/e23b1facc72bd86234b6
+  validates :email,            presence: true, uniqueness: { case_sensitive: true }
   validates :password,         presence: true, format: { with: /\A(?=.*?[a-zA-Z])(?=.*?\d)[a-zA-Z\d]{6,}\z/ }  # UTF-8の全角文字の範囲調べる
   validates :given_name,       presence: true, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }
   validates :family_name,      presence: true, format: { with: /\A[ぁ-んァ-ン一-龥]+\z/ }

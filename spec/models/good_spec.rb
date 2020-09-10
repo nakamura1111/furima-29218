@@ -107,6 +107,12 @@ RSpec.describe Good, type: :model do
     # 正常
     it 'すべてのデータがバリデーションの範囲内ならば登録できる' do
       expect(@good).to be_valid
+      goods = FactoryBot.create_list(:good, 30)
+      goods.each do |good|
+        if !(expect(good).to be_valid)
+          puts good.user
+        end
+      end
     end
   end
 end
