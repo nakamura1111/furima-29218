@@ -1,22 +1,24 @@
 class Good < ApplicationRecord
   # バリデーション
-  validates :name,                 presence: true, length: { maximum: 40 }
-  validates :description,          presence: true, length: { maximum: 1000 }
-  validates :category_id,          presence: true, numericality: { other_than: 1 }
-  validates :status_id,            presence: true, numericality: { other_than: 1 }
-  validates :price,                presence: true,
-                                   numericality: {
-                                     only_integer: true, greater_than_or_equal_to: 300, less_than: 10_000_000
-                                   }
-  validates :origin_prefecture_id, presence: true, numericality: { other_than: 1 }
-  validates :delivery_days_id,     presence: true, numericality: { other_than: 1 }
-  validates :fee_charger_id,       presence: true, numericality: { other_than: 1 }
-  validates :image,                presence: true
-
+  with_options presence: true do
+    validates :name,                 length: { maximum: 40 }
+    validates :description,          length: { maximum: 1000 }
+    validates :price,                numericality: {
+                                      only_integer: true, greater_than_or_equal_to: 300, less_than: 10_000_000
+                                     }
+    validates :images
+    with_options numericality: { other_than: 1 } do
+      validates :category_id
+      validates :status_id
+      validates :origin_prefecture_id
+      validates :delivery_days_id
+      validates :fee_charger_id
+    end
+  end
   # アソシエーション
   belongs_to :user
   has_one :buy_history, dependent: :destroy
-  has_one_attached :image, dependent: :destroy
+  has_many_attached :images, dependent: :destroy
 
   # ActiveHashのアソシエーション
   extend ActiveHash::Associations::ActiveRecordExtensions
