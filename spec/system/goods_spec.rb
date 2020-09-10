@@ -2,9 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "商品出品機能", type: :system do
   before do
-    @user = FactoryBot.create(:user)
+    @user = create_user
     @good = FactoryBot.build(:good)
     @good.user = @user
+    #basic_login
   end
   context "商品が出品できるとき" do
     it "ログイン状態で指定通りに入力フォームを記入した場合出品できる" do
@@ -50,7 +51,7 @@ RSpec.describe "商品出品機能", type: :system do
       expect(current_path).to eq(new_user_session_path)
     end
   end
-  context "利益と手数料が表示されるとき（非同期通信）" do
+  context "利益と手数料が表示されるとき" do
     it "価格を入力するとそれに応じた利益と手数料が表示される" do
       # ログインする（トップページに遷移していることを確認済み）
       login_user(@good.user)
@@ -65,6 +66,22 @@ RSpec.describe "商品出品機能", type: :system do
       # 利益と手数料が表示されていることを確認
       expect(page).to have_selector("#add-tax-price", text: (@good.price*0.1).to_i)     # id指定による表示の確認
       expect(page).to have_selector("#profit", text: (@good.price*0.9).to_i)
+    end
+  end
+  context "画像プレビューが表示されるとき" do
+    it "画像をフォームに入力すると、画像が表示される" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      # JSの動作完了待ち
+      sleep(1)
+      # プレビュー画像が表示されていることを確認
+      expect(find('#image-preview')[:'data-filename']).to include("hero.jpg")
     end
   end
 end
