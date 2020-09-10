@@ -407,4 +407,20 @@ RSpec.describe "商品編集機能", type: :system do
       expect(current_path).to eq(root_path)
     end
   end
+  context "画像プレビューが表示されるとき" do
+    it "画像をフォームに入力すると、画像が表示される" do
+      #ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 商品詳細ページへ遷移する
+      visit edit_good_path(@good)
+      # 商品編集ページに遷移しているか確認
+      expect(current_path).to eq(edit_good_path(@good))
+      # 出品情報の入力
+      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      # JSの動作完了待ち
+      sleep(1)
+      # プレビュー画像が表示されていることを確認
+      expect(find('#image-preview')[:'data-filename']).to include("hero.jpg")
+    end
+  end
 end
