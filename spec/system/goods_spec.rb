@@ -119,7 +119,7 @@ RSpec.describe "商品出品機能", type: :system do
         expect(all('#image-preview')[i][:'data-filename']).to include("#{i}.jpg")
       end
     end
-    it "既に入力された画像の代わりに別の画像を入れると画像が表示される" do
+    it "既に入力された画像の代わりに別の画像を入れると画像が入れ替わる" do
       # ログインする（トップページに遷移していることを確認済み）
       login_user(@good.user)
       # 出品ボタンをクリック
