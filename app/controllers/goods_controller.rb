@@ -15,6 +15,7 @@ class GoodsController < ApplicationController
     if @good.save
       redirect_to root_path
     else
+      @good.images = nil
       render :new
     end
   end
