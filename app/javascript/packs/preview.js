@@ -5,14 +5,32 @@ if (document.URL.match('/goods') ) {                                //newアク�
     const imagePreview = document.getElementById("preview");
 
     // 
-
+    const previewEventHandler = (imageElementNum, imageInputBtn) => {
+      imageInputBtn.addEventListener('change', (e) => {
+        // // 画像が表示されている場合のみ、すでに存在している画像を削除する
+        // const imageContent = document.querySelector('#image-preview');
+        // if (imageContent){
+        //   imageContent.remove();
+        // }
+        // 画像情報を取得し、URLに変換する
+        const imageFile = e.target.files[0];
+        const blob = window.URL.createObjectURL(imageFile);
+        // プレビュー画像表示
+        if ( document.getElementById(`item-image-${imageElementNum+1}`) == null ) {
+          createImageHTML(blob, imageFile);
+        }
+        else {
+          updateImageHTML(blob, imageFile, imageInputBtn);
+        }
+      });
+    }
 
     // 選択した画像を表示する関数
     const createImageHTML = (blob, imageFile) => {
       // 画像表示のためのdiv要素を生成する
       const imageElement = document.createElement('div');
       imageElement.setAttribute('id', "image-element")
-      let imageElementNum = document.querySelectorAll('#image-element').length  // div要素の数で現在のプレビュー画像の数を把握する
+      let imageElementNum = document.querySelectorAll('#image-element').length + 1  // div要素の数で現在のプレビュー画像の数を把握する
       // 
       // 画像表示のためのimg要素を生成する
       const blobImage = document.createElement('img');
@@ -23,7 +41,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
       blobImage.setAttribute('height', 'auto');
       // ファイル選択ボタンの生成する
       const imageInputBtn = document.createElement('input')
-      imageInputBtn.setAttribute('id', `item-image-${imageElementNum+1}`)
+      imageInputBtn.setAttribute('id', `item-image-${imageElementNum}`)
       imageInputBtn.setAttribute('name', 'good[images][]')
       imageInputBtn.setAttribute('type', 'file')
       // ネスト化（引数が子HTML要素）してブラウザに表示させる
@@ -32,18 +50,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
       imagePreview.appendChild(imageElement);
 
       // 新しく生成したファイル選択に対し、プレビューのイベント発火
-      imageInputBtn.addEventListener('change', (e) => {
-        // 画像情報を取得し、URLに変換する
-        const imageFile = e.target.files[0];
-        const blob = window.URL.createObjectURL(imageFile);
-        // プレビュー画像表示
-        if ( document.getElementById(`item-image-${imageElementNum+2}`) == null ) {
-          createImageHTML(blob, imageFile);
-        }
-        else {
-          updateImageHTML(blob, imageFile, imageInputBtn);
-        }
-      });
+      previewEventHandler(imageElementNum, imageInputBtn);
     };
 
     // 選択した画像に変更する関数
@@ -56,24 +63,8 @@ if (document.URL.match('/goods') ) {                                //newアク�
     };
     
     // メイン処理
-    const imageInputBtn = document.getElementById("item-image-0")
-    imageInputBtn.addEventListener('change', (e) => {
-      // // 画像が表示されている場合のみ、すでに存在している画像を削除する
-      // const imageContent = document.querySelector('#image-preview');
-      // if (imageContent){
-      //   imageContent.remove();
-      // }
-      // 画像情報を取得し、URLに変換する
-      const imageFile = e.target.files[0];
-      const blob = window.URL.createObjectURL(imageFile);
-
-      // プレビュー画像表示
-      if ( document.getElementById("item-image-1") == null ) {
-        createImageHTML(blob, imageFile);
-      }
-      else {
-        updateImageHTML(blob, imageFile, imageInputBtn);
-      }
-    });
+    const imageInputBtn = document.getElementById("item-image-0");
+    const imageElementNum = 0;
+    previewEventHandler(imageElementNum, imageInputBtn);
   });
 }
