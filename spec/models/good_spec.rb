@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Good, type: :model do
   before do
     @good = FactoryBot.build(:good)
-    @good.image = fixture_file_upload('public/images/camera.png')
   end
   describe '商品情報の保存の可否' do
     # name
@@ -100,9 +99,9 @@ RSpec.describe Good, type: :model do
     end
     # image
     it 'imageが紐づいていないと登録できない' do
-      @good.image = nil
+      @good.images = nil
       @good.valid?
-      expect(@good.errors.full_messages).to include("Image can't be blank")
+      expect(@good.errors.full_messages).to include("Images can't be blank")
     end
     # 正常
     it 'すべてのデータがバリデーションの範囲内ならば登録できる' do
