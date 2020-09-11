@@ -5,7 +5,6 @@ RSpec.describe "商品出品機能", type: :system do
     @user = create_user
     @good = FactoryBot.build(:good)
     @good.user = @user
-    #basic_login
   end
   context "商品が出品できるとき" do
     it "ログイン状態で指定通りに入力フォームを記入した場合出品できる" do
@@ -16,7 +15,26 @@ RSpec.describe "商品出品機能", type: :system do
       # 出品情報入力ページへ遷移していることを確認
       expect(current_path).to eq(new_good_path)
       # 出品情報の入力
-      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      attach_file( "good[images][]", Rails.root.join("spec/fixtures/hero.jpg") )
+      fill_in_new_good(@good)
+      # 登録ボタンを押すと、出品情報がDBに登録されることを確認
+      expect{
+        find('input[name="commit"]').click
+      }.to change{ Good.count }.by(1)
+      # トップページに遷移していることを確認
+      expect(current_path).to eq(root_path)
+    end
+    it "ログイン状態・入力の不備がない場合、画像が複数枚でも出品できる" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      3.times do |i|
+        attach_file( "good[images][]", Rails.root.join("spec/fixtures/#{i}.jpg"), id: "item-image-#{i}" )
+      end
       fill_in_new_good(@good)
       # 登録ボタンを押すと、出品情報がDBに登録されることを確認
       expect{
@@ -60,7 +78,7 @@ RSpec.describe "商品出品機能", type: :system do
       # 出品情報入力ページへ遷移していることを確認
       expect(current_path).to eq(new_good_path)
       # 価格入力フォームのイベントが発火できるようになるための準備まで待つ
-      sleep(3)
+      sleep(1)
       # 商品価格の入力
       fill_in 'item-price', with: @good.price
       # 利益と手数料が表示されていることを確認
@@ -77,11 +95,68 @@ RSpec.describe "商品出品機能", type: :system do
       # 出品情報入力ページへ遷移していることを確認
       expect(current_path).to eq(new_good_path)
       # 出品情報の入力
-      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      attach_file( "good[images][]", Rails.root.join("spec/fixtures/hero.jpg") )
       # JSの動作完了待ち
       sleep(1)
       # プレビュー画像が表示されていることを確認
       expect(find('#image-preview')[:'data-filename']).to include("hero.jpg")
+    end
+    it "複数枚画像を入力すると、いずれの画像も表示される" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      2.times do |i|
+        attach_file( 'good[images][]', Rails.root.join("spec/fixtures/#{i}.jpg") , id: "item-image-#{i}")
+      end
+      # JSの動作完了待ち
+      sleep(1)
+      # プレビュー画像が表示されていることを確認
+      2.times do |i|
+        expect(all('#image-preview')[i][:'data-filename']).to include("#{i}.jpg")
+      end
+    end
+    it "既に入力された画像の代わりに別の画像を入れると画像が表示される" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      3.times do |i|
+        attach_file( "good[images][]", Rails.root.join("spec/fixtures/#{i}.jpg"), id: "item-image-#{i}" )
+      end
+      attach_file( "good[images][]", Rails.root.join("spec/fixtures/hero.jpg"), id: "item-image-1" )
+      # JSの動作完了待ち
+      sleep(1)
+      # プレビュー画像が表示されていることを確認
+      expect(all('#image-preview')[0][:'data-filename']).to include("0.jpg")
+      expect(all('#image-preview')[1][:'data-filename']).to include("hero.jpg")
+      expect(all('#image-preview')[2][:'data-filename']).to include("2.jpg")
+    end
+  end
+  context "画像が削除されるとき" do
+    it "フォーム入力が失敗した際に画像が入力されていた場合、画像の入力はなくなっている" do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 出品ボタンをクリック
+      find(class: "purchase-btn-icon").click
+      # 出品情報入力ページへ遷移していることを確認
+      expect(current_path).to eq(new_good_path)
+      # 出品情報の入力
+      3.times do |i|
+        attach_file( "good[images][]", Rails.root.join("spec/fixtures/#{i}.jpg"), id: "item-image-#{i}" )
+      end
+      # 登録ボタンを押す
+      find('input[name="commit"]').click
+      # 出品画面に遷移していることを確認
+      expect(current_path).to eq(goods_path)
+      # プレビュー画像が表示されていないことを確認
+      expect(all('#image-preview')).to match([])
     end
   end
 end
@@ -318,7 +393,7 @@ RSpec.describe "商品編集機能", type: :system do
       @good2.user = @good.user
       update_image_file = "mac_short_cut_key_index.jpg"
       # 更新情報の設定
-      attach_file( "good[image]", Rails.root.join("spec/fixtures/#{update_image_file}") )
+      attach_file( "good[images][]", Rails.root.join("spec/fixtures/#{update_image_file}") )
       fill_in_new_good(@good2)
       # 編集してもGoodモデルのカウントは変わらない
       expect{
@@ -416,7 +491,7 @@ RSpec.describe "商品編集機能", type: :system do
       # 商品編集ページに遷移しているか確認
       expect(current_path).to eq(edit_good_path(@good))
       # 出品情報の入力
-      attach_file( "good[image]", Rails.root.join("spec/fixtures/hero.jpg") )
+      attach_file( "good[images][]", Rails.root.join("spec/fixtures/hero.jpg") )
       # JSの動作完了待ち
       sleep(1)
       # プレビュー画像が表示されていることを確認
