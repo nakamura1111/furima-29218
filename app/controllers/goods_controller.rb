@@ -43,7 +43,7 @@ class GoodsController < ApplicationController
   end
 
   def update
-    params[:image] = @good.image  if params[:image] == nil
+    params[:images] = @good.images  if params[:images] == nil
     if @good.update(good_params)
       redirect_to action: "show", id: @good.id
     else
@@ -61,7 +61,7 @@ class GoodsController < ApplicationController
     params.require(:good).permit(
       :name, :description, :category_id,
       :status_id, :price, :origin_prefecture_id,
-      :delivery_days_id, :fee_charger_id, :image
+      :delivery_days_id, :fee_charger_id, images: []
     ).merge(user_id: current_user.id)
   end
 

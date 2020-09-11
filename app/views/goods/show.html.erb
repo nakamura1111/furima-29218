@@ -7,7 +7,7 @@
       <%= "【商品名】#{@good.name}" %>
     </h2>
     <div class='item-img-content'>
-      <%= image_tag @good.image.variant(resize:'500x500') ,class:"item-box-img" %>
+      <%= image_tag @good.images[0].variant(resize:'500x500') ,class:"item-box-img" %>
       <% if @good.buy_history != nil %>
       <div class='sold-out'>
         <span>Sold Out!!</span>
