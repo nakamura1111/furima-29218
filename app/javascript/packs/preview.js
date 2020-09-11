@@ -4,7 +4,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
     // 画像プレビューを表示するHTML要素の抽出
     const imagePreview = document.getElementById("preview");
 
-    // 
+    // ファイルの入力に対するイベントハンドラ
     const previewEventHandler = (imageElementNum, imageInputBtn) => {
       imageInputBtn.addEventListener('change', (e) => {
         // // 画像が表示されている場合のみ、すでに存在している画像を削除する
@@ -31,7 +31,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
       const imageElement = document.createElement('div');
       imageElement.setAttribute('id', "image-element")
       let imageElementNum = document.querySelectorAll('#image-element').length + 1  // div要素の数で現在のプレビュー画像の数を把握する
-      // 
+      
       // 画像表示のためのimg要素を生成する
       const blobImage = document.createElement('img');
       blobImage.setAttribute('src', blob);
@@ -39,18 +39,21 @@ if (document.URL.match('/goods') ) {                                //newアク�
       blobImage.setAttribute('id', 'image-preview');
       blobImage.setAttribute('width', '300');
       blobImage.setAttribute('height', 'auto');
-      // ファイル選択ボタンの生成する
-      const imageInputBtn = document.createElement('input')
-      imageInputBtn.setAttribute('id', `item-image-${imageElementNum}`)
-      imageInputBtn.setAttribute('name', 'good[images][]')
-      imageInputBtn.setAttribute('type', 'file')
       // ネスト化（引数が子HTML要素）してブラウザに表示させる
       imageElement.appendChild(blobImage);
-      imageElement.appendChild(imageInputBtn);
       imagePreview.appendChild(imageElement);
-
-      // 新しく生成したファイル選択に対し、プレビューのイベント発火
-      previewEventHandler(imageElementNum, imageInputBtn);
+      // ファイル選択数の上限設定(仮)
+      if (imageElementNum <= 5 ) {
+        // ファイル選択ボタンの生成する
+        const imageInputBtn = document.createElement('input')
+        imageInputBtn.setAttribute('id', `item-image-${imageElementNum}`)
+        imageInputBtn.setAttribute('name', 'good[images][]')
+        imageInputBtn.setAttribute('type', 'file')
+        // ファイル選択ボタンを表示する
+        imageElement.appendChild(imageInputBtn);
+        // 新しく生成したファイル選択に対し、プレビューのイベント発火
+        previewEventHandler(imageElementNum, imageInputBtn);
+      }
     };
 
     // 選択した画像に変更する関数
@@ -59,7 +62,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
       const btnNumber = Number( imageInputBtn.id.match(/[0-9]+/)[0] );                // ファイル選択ボタンのidの末尾についている数値をとりだす。
       const blobImage = document.querySelectorAll('#image-preview')[btnNumber];
       blobImage.setAttribute('src', blob);
-      blobImage.setAttribute('data-filename', imageFile.name)                         // テストコード作成用にファイル名を記録する。
+      blobImage.setAttribute('data-filename', imageFile.name);                        // テストコード作成用にファイル名を記録する。
     };
     
     // メイン処理
