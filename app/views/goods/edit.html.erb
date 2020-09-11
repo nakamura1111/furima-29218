@@ -21,11 +21,16 @@ app/assets/stylesheets/items/new.css %>
         <p>
           クリックしてファイルをアップロード
         </p>
-        <%= f.file_field :image, id:"item-image" %>
+        <%= f.file_field :images, name: 'good[images][]', id:"item-image-0" %>
         <div id="preview">
-          <div>
-            <%= image_tag('' , id: 'image-preview', alt: 'no image') %>
-          <div>
+          <% @good.images.each_with_index do |image, i| %>
+          <div id="image-element">
+            <%= image_tag(image, width: '300', height: 'auto', id: 'image-preview') %>
+            <% if i < 5 %>                                                             <%# 枚数上限の仮入力 %>
+            <%= f.file_field :images, name: 'good[images][]', id:"item-image-#{i+1}" %>
+            <% end %>
+          </div>
+          <% end %>
         </div>
       </div>
     </div>

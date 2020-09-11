@@ -59,15 +59,18 @@ if (document.URL.match('/goods') ) {                                //newアク�
     // 選択した画像に変更する関数
     const updateImageHTML = (blob, imageFile, imageInputBtn) => {
       // 画像本体であるimg要素の属性値変更
-      const btnNumber = Number( imageInputBtn.id.match(/[0-9]+/)[0] );                // ファイル選択ボタンのidの末尾についている数値をとりだす。
-      const blobImage = document.querySelectorAll('#image-preview')[btnNumber];
+      const imageElementNum = Number( imageInputBtn.id.match(/[0-9]+/)[0] );                // ファイル選択ボタンのidの末尾についている数値をとりだす。
+      const blobImage = document.querySelectorAll('#image-preview')[imageElementNum];
       blobImage.setAttribute('src', blob);
       blobImage.setAttribute('data-filename', imageFile.name);                        // テストコード作成用にファイル名を記録する。
     };
     
     // メイン処理
-    const imageInputBtn = document.getElementById("item-image-0");
-    const imageElementNum = 0;
-    previewEventHandler(imageElementNum, imageInputBtn);
+    let imageInputBtn = document.getElementById("item-image-0");
+    while(imageInputBtn){
+      const imageElementNum = Number( imageInputBtn.id.match(/[0-9]+/)[0] );
+      previewEventHandler(imageElementNum, imageInputBtn);
+      imageInputBtn = document.getElementById(`item-image-${imageElementNum+1}`);
+    }
   });
 }
