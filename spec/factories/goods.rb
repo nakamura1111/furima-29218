@@ -10,9 +10,9 @@ FactoryBot.define do
     fee_charger_id       { FeeCharger.where(id: 2..).sample.id }
     association :user
     images               {[
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/0.jpg"), 'image/jpg'),
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/1.jpg"), 'image/jpg'),
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/2.jpg"), 'image/jpg'),
+                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
+                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
+                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
                          ]}
   end
 end

@@ -23,12 +23,10 @@ module GoodSupport
     #   image: @image
     # )
   end
-  # imageの表示は含まれない
+  
   def show_good(good)
+    # imageの確認は含まれない
     expect(find('h2.name').text).to include("#{good.name}")
-    good.images.length.times do |i|
-      expect( all('.item-box-img')[i][:src] ).to include( good.images.blobs[i].filename.to_s )
-    end
     expect(find('.item-price').text).to include("#{good.price}")
     expect(all('.detail-value')[0].text).to eq(good.user.nickname)
     expect(all('.detail-value')[1].text).to eq(Category.find(good.category_id).name)
