@@ -19,11 +19,8 @@
         <p>
           クリックしてファイルをアップロード
         </p>
-        <%= f.file_field :image, id:"item-image" %>
+        <%= f.file_field :images, name: 'good[images][]', id:"item-image-0" %>
         <div id="preview">
-          <div>
-            <%= image_tag('' , id: 'image-preview', alt: 'no image') %>
-          <div>
         </div>
       </div>
     </div>
