@@ -1,0 +1,41 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        nickname: ニックネーム
+        given_name: 名前(全角)
+        family_name: 苗字(全角)
+        given_name_kana: 名前(カナ)
+        family_name_kana: 苗字(カナ)
+        birth_day: 生年月日
+      good:
+        name: 商品名
+        images: 出品画像
+        description: 商品の説明
+        category_id: 商品のカテゴリー
+        status_id: 商品の状態
+        fee_charger_id: 配送料の負担者
+        origin_prefecture_id: 発送元の地域
+        delivery_days_id: 発送までの日数
+        price: 販売価格
+  activemodel:
+    attributes:
+      buy_info:
+        postal_code: 郵便番号
+        addr_prefecture_id: 都道府県
+        addr_municipality: 市区町村
+        addr_house_number: 番地
+        tel_number: 電話番号
+      credit:
+        token: クレジットカード情報
+  errors:
+    messages:
+      other_than: を選択してください
+      invalid: の入力を確認してください
+      not_a_number: に半角数字のみで記入してください
+
+
+
+
+ 
+        
