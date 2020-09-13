@@ -8,11 +8,11 @@ class BuyInfo
 
   # バリデーション（BuyerとBuyHistoryモデル）
   with_options presence: true do
-    validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/ }
-    validates :addr_prefecture_id, numericality: { other_than: 1 }
+    validates :postal_code, format: { with: /\A\d{3}[-]\d{4}\z/, allow_blank: true }
+    validates :addr_prefecture_id, numericality: { other_than: 1, allow_blank: true }
     validates :addr_municipality
     validates :addr_house_number
-    validates :tel_number, length: { maximum: 11 }, numericality: true
+    validates :tel_number, length: { maximum: 11, allow_blank: true }, numericality: { allow_blank: true }
     validates :user
     validates :good
   end
