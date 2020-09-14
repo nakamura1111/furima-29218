@@ -3,7 +3,7 @@ class GoodsController < ApplicationController
   before_action :current_good,  only: [:show, :destroy, :edit, :update]
 
   def index
-    @goods = Good.all.order('created_at DESC').includes(:user)
+    @goods = Good.order('created_at DESC').first(10)
   end
 
   def new
@@ -50,6 +50,9 @@ class GoodsController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def search
   end
 
   private
