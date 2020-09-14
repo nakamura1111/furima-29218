@@ -8,7 +8,7 @@ if (document.URL.match('/goods') ) {                                //newアク�
     const previewEventHandler = (imageElementNum, imageInputBtn) => {
       imageInputBtn.addEventListener('change', (e) => {
         // // 画像が表示されている場合のみ、すでに存在している画像を削除する
-        // const imageContent = document.querySelector('#image-preview');
+        // const imageContent = document.querySelector('#image-preview-new');
         // if (imageContent){
         //   imageContent.remove();
         // }
@@ -29,14 +29,14 @@ if (document.URL.match('/goods') ) {                                //newアク�
     const createImageHTML = (blob, imageFile) => {
       // 画像表示のためのdiv要素を生成する
       const imageElement = document.createElement('div');
-      imageElement.setAttribute('id', "image-element")
-      let imageElementNum = document.querySelectorAll('#image-element').length + 1  // div要素の数で現在のプレビュー画像の数を把握する
+      imageElement.setAttribute('id', "image-element-new")
+      let imageElementNum = document.querySelectorAll('#image-element-new').length + 1  // div要素の数で現在のプレビュー画像の数を把握する
       
       // 画像表示のためのimg要素を生成する
       const blobImage = document.createElement('img');
       blobImage.setAttribute('src', blob);
       blobImage.setAttribute('data-filename', imageFile.name)     // テストコード作成用にファイル名の記録
-      blobImage.setAttribute('id', 'image-preview');
+      blobImage.setAttribute('id', 'image-preview-new');
       blobImage.setAttribute('width', '300');
       blobImage.setAttribute('height', 'auto');
       // ネスト化（引数が子HTML要素）してブラウザに表示させる
@@ -60,17 +60,20 @@ if (document.URL.match('/goods') ) {                                //newアク�
     const updateImageHTML = (blob, imageFile, imageInputBtn) => {
       // 画像本体であるimg要素の属性値変更
       const imageElementNum = Number( imageInputBtn.id.match(/[0-9]+/)[0] );                // ファイル選択ボタンのidの末尾についている数値をとりだす。
-      const blobImage = document.querySelectorAll('#image-preview')[imageElementNum];
+      const blobImage = document.querySelectorAll('#image-preview-new')[imageElementNum];
       blobImage.setAttribute('src', blob);
       blobImage.setAttribute('data-filename', imageFile.name);                        // テストコード作成用にファイル名を記録する。
     };
     
     // メイン処理
     let imageInputBtn = document.getElementById("item-image-0");
-    while(imageInputBtn){
-      const imageElementNum = Number( imageInputBtn.id.match(/[0-9]+/)[0] );
-      previewEventHandler(imageElementNum, imageInputBtn);
-      imageInputBtn = document.getElementById(`item-image-${imageElementNum+1}`);
-    }
+    const imageElementNum = 0;
+    previewEventHandler(imageElementNum, imageInputBtn);
+    // let imageInputBtn = document.getElementById("item-image-0");
+    // while(imageInputBtn){
+    //   const imageElementNum = Number( imageInputBtn.id.match(/[0-9]+/)[0] );
+    //   previewEventHandler(imageElementNum, imageInputBtn);
+    //   imageInputBtn = document.getElementById(`item-image-${imageElementNum+1}`);
+    // }
   });
 }

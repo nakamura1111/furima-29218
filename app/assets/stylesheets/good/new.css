@@ -88,6 +88,9 @@
 .click-upload>p {
   margin-bottom: 15px;
 }
+.click-upload>p.old-image-delete-alert {
+  background-color: yellow;
+}
 
 /* /出品画像 */
 
