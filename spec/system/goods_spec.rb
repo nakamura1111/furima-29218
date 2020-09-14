@@ -99,7 +99,7 @@ RSpec.describe "商品出品機能", type: :system do
       # JSの動作完了待ち
       sleep(1)
       # プレビュー画像が表示されていることを確認
-      expect(find('#image-preview')[:'data-filename']).to include("hero.jpg")
+      expect(find('#image-preview-new')[:'data-filename']).to include("hero.jpg")
     end
     it "複数枚画像を入力すると、いずれの画像も表示される" do
       # ログインする（トップページに遷移していることを確認済み）
@@ -116,7 +116,7 @@ RSpec.describe "商品出品機能", type: :system do
       sleep(1)
       # プレビュー画像が表示されていることを確認
       3.times do |i|
-        expect(all('#image-preview')[i][:'data-filename']).to include("#{i}.jpg")
+        expect(all('#image-preview-new')[i][:'data-filename']).to include("#{i}.jpg")
       end
     end
     it "既に入力された画像の代わりに別の画像を入れると画像が入れ替わる" do
@@ -134,9 +134,9 @@ RSpec.describe "商品出品機能", type: :system do
       # JSの動作完了待ち
       sleep(1)
       # プレビュー画像が表示されていることを確認
-      expect(all('#image-preview')[0][:'data-filename']).to include("0.jpg")
-      expect(all('#image-preview')[1][:'data-filename']).to include("hero.jpg")
-      expect(all('#image-preview')[2][:'data-filename']).to include("2.jpg")
+      expect(all('#image-preview-new')[0][:'data-filename']).to include("0.jpg")
+      expect(all('#image-preview-new')[1][:'data-filename']).to include("hero.jpg")
+      expect(all('#image-preview-new')[2][:'data-filename']).to include("2.jpg")
     end
   end
   context "画像が削除されるとき" do
@@ -394,7 +394,7 @@ RSpec.describe "商品編集機能", type: :system do
       # 更新情報の設定
       @good_input_for_edit = FactoryBot.build(:good)
       @good_input_for_edit.user = @good.user
-      # 更新情報の設定(３枚の画像変更)
+      # 更新情報の設定(３枚の画像登録)
       3.times do |i|
         attach_file( "good[images][]", Rails.root.join("spec/fixtures/#{@good_input_for_edit.images.blobs[i].filename.to_s}"), id: "item-image-#{i}" )
       end
@@ -501,7 +501,7 @@ RSpec.describe "商品編集機能", type: :system do
       expect(current_path).to eq(edit_good_path(@good))
       # プレビュー画像が表示されていることを確認
       3.times do |i|
-        expect(all('#image-preview')[i][:src]).to include(@good.images.blobs[i].filename.to_s)
+        expect(all('#image-preview-old')[i][:src]).to include(@good.images.blobs[i].filename.to_s)
       end
     end
     it "複数枚画像を入力すると、いずれの画像も表示される" do
@@ -512,32 +512,17 @@ RSpec.describe "商品編集機能", type: :system do
       # 商品編集ページに遷移していることを確認
       expect(current_path).to eq(edit_good_path(@good))
       # 出品画像の追加
-      range = 3..5
       jpgNum = []
-      range.each do |i|
+      3.times do |i|
         jpgNum[i] = (0..5).to_a.sample
         attach_file( 'good[images][]', Rails.root.join("spec/fixtures/#{jpgNum[i]}.jpg") , id: "item-image-#{i}")
       end
       # JSの動作完了待ち
       sleep(1)
       # プレビュー画像が表示されていることを確認
-      range.each do |i|
-        expect(all('#image-preview')[i][:'data-filename']).to include("#{jpgNum[i]}.jpg")
+      3.times do |i|
+        expect(all('#image-preview-new')[i][:'data-filename']).to include("#{jpgNum[i]}.jpg")
       end
-    end
-    it "既に入力された画像の代わりに別の画像を入れると画像が入れ替わる" do
-      # ログインする（トップページに遷移していることを確認済み）
-      login_user(@good.user)
-      # 商品詳細ページへ遷移する
-      visit edit_good_path(@good)
-      # 商品編集ページに遷移していることを確認
-      expect(current_path).to eq(edit_good_path(@good))
-      # 画像の変更
-      attach_file( 'good[images][]', Rails.root.join("spec/fixtures/hero.jpg") , id: "item-image-2")
-      # JSの動作完了待ち
-      sleep(1)
-      # プレビュー画像が表示されていることを確認
-      expect(all('#image-preview')[2][:'data-filename']).to include("hero.jpg")
     end
   end
 end
