@@ -126,61 +126,8 @@
     <%= link_to '新規投稿商品', "#", class: "subtitle" %>
     <ul class='item-lists'>
       <% @goods.each do |good| %>
-      <li class='list'>
-        <%= link_to good_path(good) do %>
-        <div class='item-img-content'>
-          <%= image_tag good.images[0].variant(resize:'500x500'), class: "item-img" %>
-
-          <%# 商品が売れていればsold outの表示 %>
-          <% if good.buy_history != nil %>
-          <div class='sold-out'>
-            <span>Sold Out!!</span>
-          </div>
-          <% end %>
-          <%# //商品が売れていればsold outの表示 %>
-
-        </div>
-        <div class='item-info'>
-          <h3 class='item-name'>
-            <%= good.name %>
-          </h3>
-          <div class='item-price'>
-            <span><%= good.price %>円<br>(税込み)</span>
-            <div class='star-btn'>
-              <%= image_tag "star.png", class:"star-icon" %>
-              <span class='star-count'>0</span>
-            </div>
-          </div>
-        </div>
-        <% end %>
-      </li>
+      <%= render partial: "shared/goods_display", locals: { good: good } %>
       <% end %>
-
-      <%# 商品がない場合のダミー %>
-      <%# 商品がある場合は表示されないようにしましょう %>
-      <%
-=begin%>
- <li class='list'>
-        <%= link_to '#' do %>
-        <%= image_tag "https://s3-ap-northeast-1.amazonaws.com/mercarimaster/uploads/captured_image/content/10/a004.png", class: "item-img" %>
-        <div class='item-info'>
-          <h3 class='item-name'>
-            商品を出品してね！
-          </h3>
-          <div class='item-price'>
-            <span>99999999円<br>(税込み)</span>
-            <div class='star-btn'>
-              <%= image_tag "star.png", class:"star-icon" %>
-              <span class='star-count'>0</span>
-            </div>
-          </div>
-        </div>
-        <% end %>
-      </li> 
-<%
-=end%>
-      <%# //商品がある場合は表示されないようにしましょう %>
-      <%# //商品がない場合のダミー %>
     </ul>
   </div>
   <%# //商品一覧 %>

@@ -1,26 +1,34 @@
 <%= render "shared/header" %>
 <div class='main'>
   <%= render "shared/good_search" %>
+  <div class='item-contents'>
+    <h2 class='title'>検索結果</h2>
+    <ul class='item-lists'>
+      <% if @results.length != 0 %>
+      <% @results.each do |result| %>
+      <%= render partial: "shared/goods_display", locals: { good: result } %>
+      <% end %>
+      <%
+=begin%>
+      <%= link_to good_path(result) do %>
+      <div>
+        <%= "商品名：#{result.name}" %>
+        <%= "価格：#{result.price}" %>
+      </div>
+      <div>
+        <%= image_tag result.images[0].variant(resize:'500x500'), class: "item-img" %>
+      </div>
+      <% end %> 
+    <%
+=end%>
 
-  <% if @results.length != 0 %>
-  <% @results.each do |result| %>
-  <%= link_to good_path(result) do %>
-  <div>
-    <%= "商品名：#{result.name}" %>
-    <%= "価格：#{result.price}" %>
+      <% else %>
+      <div>
+        該当する商品はありません
+      </div>
+
+      <% end %>
+    </ul>
   </div>
-  <div>
-    <%= image_tag result.images[0].variant(resize:'500x500'), class: "item-img" %>
-  </div>
-  <% end %>
-  <% end %>
-
-  <% else %>
-  <div>
-    該当する商品はありません
-  </div>
-
-  <% end %>
-
 </div>
 <%= render "shared/footer" %>
