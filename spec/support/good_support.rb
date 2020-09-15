@@ -10,7 +10,7 @@ module GoodSupport
     select DeliveryDay.find(good.delivery_days_id).name, from: "good[delivery_days_id]"
     fill_in 'item-price', with: good.price
   end
-  
+
   def create_good
     return FactoryBot.create(:good)
     # @good = FactoryBot.build(:good)
@@ -34,5 +34,26 @@ module GoodSupport
     expect(all('.detail-value')[3].text).to eq(FeeCharger.find(good.fee_charger_id).name)
     expect(all('.detail-value')[4].text).to eq(Prefecture.find(good.origin_prefecture_id).name)
     expect(all('.detail-value')[5].text).to eq(DeliveryDay.find(good.delivery_days_id).name)
+  end
+
+  def fill_in_search_good(good)
+    select Category.find(good.category_id).name, from: "q[category_id_eq]"
+    select GoodStatus.find(good.status_id).name, from: "q[status_id_eq]"
+    select DeliveryDay.find(good.delivery_days_id).name, from: "q[delivery_days_id_eq]"
+    choose search_price_condition(good.price)
+  end
+
+  private
+
+  def search_price_condition(price)
+    if price < 1000
+      return "q_price_lt_1_000"
+    elsif price < 10000
+      return "q_price_lt_10_000"
+    elsif price < 100000
+      return "q_price_lt_100_000"
+    else 
+      return "q_price_lt_10_000_000"
+    end
   end
 end

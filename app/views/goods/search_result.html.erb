@@ -10,7 +10,7 @@
     <%= "価格：#{result.price}" %>
   </div>
   <div>
-    <%= image_tag result.images[0].variant(resize:'500x500') %>
+    <%= image_tag result.images[0].variant(resize:'500x500'), class: "item-img" %>
   </div>
   <% end %>
   <% end %>
