@@ -1,0 +1,26 @@
+<%= render "shared/header" %>
+<div class='main'>
+  <%= render "shared/good_search" %>
+
+  <% if @results.length != 0 %>
+  <% @results.each do |result| %>
+  <%= link_to good_path(result) do %>
+  <div>
+    <%= "商品名：#{result.name}" %>
+    <%= "価格：#{result.price}" %>
+  </div>
+  <div>
+    <%= image_tag result.images[0].variant(resize:'500x500') %>
+  </div>
+  <% end %>
+  <% end %>
+
+  <% else %>
+  <div>
+    該当する商品はありません
+  </div>
+
+  <% end %>
+
+</div>
+<%= render "shared/footer" %>

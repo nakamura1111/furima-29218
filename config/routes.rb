@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     collection do
       get 'profit_calc'
       get 'search'
+      get 'search_result'
     end
   end
 end

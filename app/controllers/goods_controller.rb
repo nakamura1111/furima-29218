@@ -1,6 +1,7 @@
 class GoodsController < ApplicationController
-  before_action :move_to_login, except: [:index, :show]
+  before_action :move_to_login, except: [:index, :show, :search, :search_result]
   before_action :current_good,  only: [:show, :destroy, :edit, :update]
+  before_action :search_good, only: [:search, :search_result]
 
   def index
     @goods = Good.order('created_at DESC').first(10)
@@ -55,6 +56,10 @@ class GoodsController < ApplicationController
   def search
   end
 
+  def search_result
+    @results = @p.result#includes
+  end
+
   private
 
   def move_to_login
@@ -72,5 +77,12 @@ class GoodsController < ApplicationController
   def current_good
     @good = Good.find(params[:id])
   end
+  # ransack専用の、検索に特化したオブジェクトを生成(カラムの末尾に検索方法を追記する)
+  def search_good
+    @p = Good.ransack(params[:q])
+  end
 
+  def set_good_column
+    # @good_category = Good.select("category").distinct
+  end
 end
