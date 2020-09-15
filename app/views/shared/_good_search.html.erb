@@ -1,44 +1,68 @@
-<h1>
-  商品検索
-</h1>
-<%= search_form_for @p, url: search_result_goods_path do |f| %>
-<%
-=begin%>
- <div>
-  <%= f.label :name_cont, '商品名' %>
-  <%= f.text_area :name_cont, placeholder:"商品名（必須 40文字まで)", maxlength:"40" %>
-</div> 
-<%
-=end%>
-<div>
-  <%= f.label :category_id_eq, '商品カテゴリ' %>
-  <%= f.collection_select :category_id_eq, Category.where(id: 2..), :id, :name, {} %>
-<div>
+<div class="search">
+  <%# 商品検索のタイトル %>
+  <div class="search-title">
+    <h1>商品検索</h1>
+  </div>
+  <%# /商品検索のタイトル %>
+  <%# 詳細商品検索 %>
+  <div class="detail-search">
+    <h2>詳細検索</h2>
+    <%= search_form_for @p, url: search_result_goods_path do |f| %>
+    <%= f.submit '検索' %>
+    <div>
+      <%= f.label :category_id_eq, '商品カテゴリ' %>
+      <%= f.collection_select :category_id_eq, Category.where(id: 2..), :id, :name, {} %>
+    <div>
+    </div>
+      <%= f.label :status_id_eq, '商品の状態' %>
+      <%= f.collection_select :status_id_eq, GoodStatus.where(id: 2..), :id, :name, {} %>
+    </div>
+    <div>
+      <%= f.label :delivery_days_id_eq, '発送までの日数' %>
+      <%= f.collection_select :delivery_days_id_eq, DeliveryDay.where(id: 2..), :id, :name, {} %>
+    </div>
+    <div>
+      <%= f.label :price, '価格：' %>
+      <%= f.radio_button :price_lt, '' %>
+      指定なし
+      <%= f.radio_button :price_lt, '1_000' %>
+      ¥1,000未満
+      <%= f.radio_button :price_lt, '10_000' %>
+      ¥10,000未満
+      <%= f.radio_button :price_lt, '100_000' %>
+      ¥100,000未満
+      <%= f.radio_button :price_lt, '10_000_000' %>
+      ¥100,000以上
+    </div>
+    <% end %>
+  </div>
+  <%# /詳細商品検索 %>
+  <%# キーワード商品検索 %>
+  <div class="keyword-search">
+    <h2>キーワード検索</h2>
+    <%= search_form_for @p, url: search_result_goods_path do |f| %>
+    <%= f.submit '検索' %>
+    <div>
+      <%= f.label :name_cont, '商品名', class: "keyword-input-form" %>
+      <%= f.text_area :name_cont, placeholder:"商品名（必須 40文字まで)", maxlength:"40"%>
+    </div>
+    <% end %>
+  </div>
+  <%# /キーワード商品検索 %>
+  <%# カテゴリ商品検索 %>
+  <div class="category-search">
+    <h2>カテゴリ検索</h2>
+    <%= search_form_for @p, url: search_result_goods_path do |f| %>
+    <%= f.submit '検索' %>
+    <div>
+      <%= f.label :category_id_eq, '商品カテゴリ' %>
+      <%= f.collection_select :category_id_eq, Category.where(id: 2..), :id, :name, {} %>
+    </div>
+    <% end %>
+  </div>
+  <%# /カテゴリ商品検索 %>
 </div>
-  <%= f.label :status_id_eq, '商品の状態' %>
-  <%= f.collection_select :status_id_eq, GoodStatus.where(id: 2..), :id, :name, {} %>
-</div>
-<div>
-  <%= f.label :delivery_days_id_eq, '発送までの日数' %>
-  <%= f.collection_select :delivery_days_id_eq, DeliveryDay.where(id: 2..), :id, :name, {} %>
-</div>
-<div>
-  <%= f.label :price, '価格：' %>
-  <%= f.radio_button :price_lt, '' %>
-  指定なし
-  <%= f.radio_button :price_lt, '1_000' %>
-  ¥1,000未満
-  <%= f.radio_button :price_lt, '10_000' %>
-  ¥10,000未満
-  <%= f.radio_button :price_lt, '100_000' %>
-  ¥100,000未満
-  <%= f.radio_button :price_lt, '10_000_000' %>
-  ¥100,000以上
-</div>
-<div>
-  <%= f.submit '検索' %>
-</div>
+
 <div>
   <%= link_to 'トップページへ戻る', root_path %>
 </div>
-<% end %>

@@ -8,19 +8,6 @@
       <% @results.each do |result| %>
       <%= render partial: "shared/goods_display", locals: { good: result } %>
       <% end %>
-      <%
-=begin%>
-      <%= link_to good_path(result) do %>
-      <div>
-        <%= "商品名：#{result.name}" %>
-        <%= "価格：#{result.price}" %>
-      </div>
-      <div>
-        <%= image_tag result.images[0].variant(resize:'500x500'), class: "item-img" %>
-      </div>
-      <% end %> 
-    <%
-=end%>
 
       <% else %>
       <div>
