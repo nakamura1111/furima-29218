@@ -1,7 +1,7 @@
 class GoodsController < ApplicationController
   before_action :move_to_login, except: [:index, :show, :search, :search_result]
   before_action :current_good,  only: [:show, :destroy, :edit, :update]
-  before_action :search_good, only: [:search, :search_result]
+  before_action :search_good, only: [:search, :search_result, :index, :show]
 
   def index
     @goods = Good.order('created_at DESC').first(10)
@@ -83,7 +83,4 @@ class GoodsController < ApplicationController
     @p = Good.ransack(params[:q])
   end
 
-  def set_good_column
-    # @good_category = Good.select("category").distinct
-  end
 end
