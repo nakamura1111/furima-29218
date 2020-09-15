@@ -20,25 +20,25 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it '空だと登録できない' do
         @buy_info.postal_code = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("郵便番号を入力してください")
+        expect(@buy_info.errors.full_messages).to include('郵便番号を入力してください')
       end
       it '数字の桁数が違うと登録できない' do
         @buy_info.postal_code = "#{Faker::Number.number(digits: 2)}-#{Faker::Number.number(digits: 4)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("郵便番号の入力を確認してください")
+        expect(@buy_info.errors.full_messages).to include('郵便番号の入力を確認してください')
         @buy_info.postal_code = "#{Faker::Number.number(digits: 3)}-#{Faker::Number.number(digits: 5)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("郵便番号の入力を確認してください")
+        expect(@buy_info.errors.full_messages).to include('郵便番号の入力を確認してください')
       end
       it 'ハイフンがないと登録できない' do
         @buy_info.postal_code = "#{Faker::Number.number(digits: 3)}#{Faker::Number.number(digits: 4)}"
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("郵便番号の入力を確認してください")
+        expect(@buy_info.errors.full_messages).to include('郵便番号の入力を確認してください')
       end
       it '数字以外があると登録できない' do
         @buy_info.postal_code = Faker::Lorem.paragraph_by_chars(number: 8)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("郵便番号の入力を確認してください")
+        expect(@buy_info.errors.full_messages).to include('郵便番号の入力を確認してください')
       end
     end
     # address(prefecture)
@@ -46,7 +46,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it 'id が 1 だと登録できない' do
         @buy_info.addr_prefecture_id = Prefecture.first.id
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("都道府県を選択してください")
+        expect(@buy_info.errors.full_messages).to include('都道府県を選択してください')
       end
     end
     # address(municipality)
@@ -54,7 +54,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it '空だと登録できない' do
         @buy_info.addr_municipality = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("市区町村を入力してください")
+        expect(@buy_info.errors.full_messages).to include('市区町村を入力してください')
       end
     end
     # address(house_number)
@@ -62,7 +62,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it '空だと登録できない' do
         @buy_info.addr_house_number = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("番地を入力してください")
+        expect(@buy_info.errors.full_messages).to include('番地を入力してください')
       end
     end
     # address(building)はなし
@@ -71,17 +71,17 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it '空だと登録できない' do
         @buy_info.tel_number = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("電話番号を入力してください")
+        expect(@buy_info.errors.full_messages).to include('電話番号を入力してください')
       end
       it '12桁以上だと登録できない' do
         @buy_info.tel_number = Faker::Number.number(digits: 12)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("電話番号は11文字以内で入力してください")
+        expect(@buy_info.errors.full_messages).to include('電話番号は11文字以内で入力してください')
       end
       it '数字以外が入っていると登録できない' do
         @buy_info.tel_number = Faker::Alphanumeric.alphanumeric(number: 11, min_alpha: 1)
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("電話番号に半角数字のみで記入してください")
+        expect(@buy_info.errors.full_messages).to include('電話番号に半角数字のみで記入してください')
       end
     end
     # user_id
@@ -89,7 +89,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it 'user_idがないと登録できない' do
         @buy_info.user = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Userを入力してください")
+        expect(@buy_info.errors.full_messages).to include('Userを入力してください')
       end
     end
     # good_id
@@ -97,7 +97,7 @@ RSpec.describe 'BuyInfoモデル', type: :model do
       it 'good_idないと登録できない' do
         @buy_info.good = nil
         @buy_info.valid?
-        expect(@buy_info.errors.full_messages).to include("Goodを入力してください")
+        expect(@buy_info.errors.full_messages).to include('Goodを入力してください')
       end
     end
   end

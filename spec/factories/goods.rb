@@ -9,10 +9,12 @@ FactoryBot.define do
     delivery_days_id     { DeliveryDay.where(id: 2..).sample.id }
     fee_charger_id       { FeeCharger.where(id: 2..).sample.id }
     association :user
-    images               {[
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
-                              Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
-                         ]}
+    images do
+      [
+        Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
+        Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg'),
+        Rack::Test::UploadedFile.new(Rails.root.join("spec/fixtures/#{(0..5).to_a.sample}.jpg"), 'image/jpg')
+      ]
+    end
   end
 end

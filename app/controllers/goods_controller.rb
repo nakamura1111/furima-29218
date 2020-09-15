@@ -41,13 +41,13 @@ class GoodsController < ApplicationController
   end
 
   def edit
-    redirect_to(root_url) unless (current_user == @good.user && @good.buy_history == nil)
+    redirect_to(root_url) unless current_user == @good.user && @good.buy_history.nil?
   end
 
   def update
-    params[:images] = @good.images  if params[:images] == nil
+    params[:images] = @good.images if params[:images].nil?
     if @good.update(good_params)
-      redirect_to action: "show", id: @good.id
+      redirect_to action: 'show', id: @good.id
     else
       render :edit
     end
@@ -57,7 +57,7 @@ class GoodsController < ApplicationController
   end
 
   def search_result
-    @results = @p.result#includes
+    @results = @p.result # includes
   end
 
   private
@@ -77,6 +77,7 @@ class GoodsController < ApplicationController
   def current_good
     @good = Good.find(params[:id])
   end
+
   # ransack専用の、検索に特化したオブジェクトを生成(カラムの末尾に検索方法を追記する)
   def search_good
     @p = Good.ransack(params[:q])
