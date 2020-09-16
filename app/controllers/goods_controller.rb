@@ -82,5 +82,4 @@ class GoodsController < ApplicationController
   def search_good
     @p = Good.ransack(params[:q])
   end
-
 end

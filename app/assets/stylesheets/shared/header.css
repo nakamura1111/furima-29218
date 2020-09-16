@@ -102,3 +102,21 @@
   text-decoration: none;
   color: #333333;
 }
+
+
+.hidden{
+  display: none;
+}
+.show-lists{
+  background-color: gray;
+}
+
+.category-select-btn{
+  display: block;
+  width: 5vh;
+  border: 0;
+  cursor: pointer;
+  background-color: #3ccace;
+  padding: 5px;
+  margin: 5px;
+}

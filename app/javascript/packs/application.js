@@ -11,6 +11,7 @@ require("channels")
 require("./profit_calc")
 require("./card")
 require("./preview")
+require("./category_hovor")
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
