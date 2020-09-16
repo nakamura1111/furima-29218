@@ -30,6 +30,8 @@ class GoodsController < ApplicationController
   end
 
   def show
+    previous_good
+    next_good
   end
 
   def destroy
@@ -76,6 +78,14 @@ class GoodsController < ApplicationController
 
   def current_good
     @good = Good.find(params[:id])
+  end
+  def previous_good
+    @good_prev = Good.where('id < ?', params[:id]).last
+    @good_prev = Good.last if @good_prev == nil
+  end
+  def next_good
+    @good_next = Good.where('id > ?', params[:id]).first
+    @good_next = Good.first if @good_next == nil
   end
 
   # ransack専用の、検索に特化したオブジェクトを生成(カラムの末尾に検索方法を追記する)
