@@ -46,7 +46,7 @@
       <%= search_form_for @p, url: search_result_goods_path do |f| %>
       <% Category.where(id: 2..).each do |category| %>
       <% f.label :category_id, 'カテゴリ' %>
-      <%= button_tag type: :submit, class: "category-select-btn" do %>
+      <%= button_tag type: :submit, class: "category-select-btn", id: "btn#{category.id}" do %>
         <div class="pull-down-list"><%= category.name %></div>
         <% f.radio_button :category_id_eq, category.id %>
       <% end %>

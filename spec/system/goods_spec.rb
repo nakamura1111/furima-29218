@@ -206,7 +206,7 @@ RSpec.describe '商品詳細表示機能', type: :system do
   before do
     @good = create_good
   end
-  context '商品詳細を見られるとき' do
+  context '商品詳細機能へ遷移できるとき' do
     it 'ログアウト状態でも商品詳細ページに遷移できる' do
       # トップページに遷移
       visit root_path
@@ -214,6 +214,28 @@ RSpec.describe '商品詳細表示機能', type: :system do
       find('div.item-price', text: "#{@good.price}円\n(税込み)\n0").click
       # 商品詳細ページへ遷移することを確認
       expect(current_path).to eq(good_path(@good))
+    end
+    it '詳細表示ページから前後の商品へ遷移できる' do
+      # 遷移用商品の生成
+      @good.delete
+      n_good = 3
+      @goods = FactoryBot.create_list(:good, n_good)
+      # 商品詳細ページへ遷移
+      visit good_path(@goods[0])
+      n_good.times do |i|
+        # 次の商品の詳細ページへのリンクをクリック
+        find_link("後ろの商品").click
+        # 次の商品に遷移できていることを確認
+        next_good_int = (i+1) % n_good
+        expect(current_path).to eq( good_path(@goods[next_good_int]) )
+      end
+      n_good.times do |i|
+        # 前の商品の詳細ページへのリンクをクリック
+        find_link("前の商品").click
+        # 前の商品に遷移できていることを確認
+        prev_good_int = (n_good-i-1) % n_good
+        expect(current_path).to eq( good_path(@goods[prev_good_int]) )
+      end
     end
   end
   context '商品詳細画面で表示されるもの' do
@@ -542,7 +564,7 @@ RSpec.describe '商品検索機能', type: :system do
       login_user(@good.user)
       # 詳細検索ボタンをクリック
       find(class: 'search-list').click
-      # 詳細ページへ遷移していることを確認
+      # 検索ページへ遷移していることを確認
       expect(current_path).to eq(search_goods_path)
     end
     it '未ログインユーザでも遷移できる' do
@@ -550,20 +572,65 @@ RSpec.describe '商品検索機能', type: :system do
       visit root_path
       # 詳細検索ボタンをクリック
       find(class: 'search-list').click
-      # 詳細ページへ遷移していることを確認
+      # 検索ページへ遷移していることを確認
       expect(current_path).to eq(search_goods_path)
     end
+    it 'ヘッダーのカテゴリ検索から検索ページへ遷移できる' do
+      # トップページを訪問
+      visit root_path
+      # ヘッダのカテゴリボタンをクリック
+      find('.category-list').click
+      sleep(1)
+      # カテゴリを一つ選んでクリック
+      category = Category.find(@good.category_id)
+      find("#btn#{category.id}").click
+      # 検索結果のページへ遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 登録済みの商品が表示されている
+      expect(page).to have_content(@good.price)
+      expect(page).to have_content(@good.name)
+      expect(find('img.item-img')[:src]).to include(@good.images.blobs[0].filename.to_s)
+    end
+    it '詳細表示機能のリンクから検索ページへ遷移できる' do
+      # 商品詳細ページを訪問
+      visit good_path(@good)
+      # カテゴリボタンをクリック
+      find("button.another-item").click
+      # 検索結果のページへ遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 登録済みの商品が表示されている
+      expect(page).to have_content(@good.price)
+      expect(page).to have_content(@good.name)
+      expect(find('img.item-img')[:src]).to include(@good.images.blobs[0].filename.to_s)
+    end
+    it 'ヘッダのキーワード入力欄に入力すると、検索ページに遷移できる' do
+      # トップページへ遷移する
+      visit root_path
+      # 検索欄へ入力する
+      fill_in_keyword_search_good(@good, page)
+      # 検索ボタンをクリック
+      find('img.search-icon').click
+      # 検索結果のページに遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 商品名・価格・画像が表示されることを確認
+      expect(page).to have_content(@good.price)
+      expect(page).to have_content(@good.name)
+      expect(find('img.item-img')[:src]).to include(@good.images.blobs[0].filename.to_s)
+      # 「該当する商品はありません」と表示されていないことを確認
+      expect(page).to have_no_content('該当する商品はありません')
+    end
   end
-  context '検索できるとき' do
+  context '詳細検索ができるとき' do
     it '検索条件が一致すると、商品名・価格・画像が表示される' do
       # ログインする（トップページに遷移していることを確認済み）
       login_user(@good.user)
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      fill_in_search_good(@good)
+      element_detail_search = find(".detail-search")
+      fill_in_detail_search_good(@good, element_detail_search)
       # 検索ボタンをクリック
-      find('input[name="commit"]').click
+      element_detail_search.find('input[name="commit"]').click
       # 検索結果のページに遷移していることを確認
       expect(current_path).to eq(search_result_goods_path)
       # 商品名・価格・画像が表示されることを確認
@@ -574,7 +641,7 @@ RSpec.describe '商品検索機能', type: :system do
       expect(page).to have_no_content('該当する商品はありません')
     end
     it '検索条件が一致していないと、「該当する商品はありません」と表示される' do
-      # 検索用のインスタンス生成
+      # 入力フォームに入力するインスタンスを生成する
       @good_search_input = FactoryBot.build(:good)
       @good_search_input.category_id = Category.where(id: 2..).sample.id while @good.category_id == @good_search_input.category_id
       # ログインする（トップページに遷移していることを確認済み）
@@ -582,9 +649,88 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      fill_in_search_good(@good_search_input)
+      element_detail_search = find(".detail-search")
+      fill_in_detail_search_good(@good_search_input, element_detail_search)
       # 検索ボタンをクリック
-      find('input[name="commit"]').click
+      element_detail_search.find('input[name="commit"]').click
+      # 検索結果のページに遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 「該当する商品はありません」と表示されることを確認
+      expect(page).to have_content('該当する商品はありません')
+    end
+  end
+  context 'キーワード検索ができるとき' do
+    it '検索条件が一致すると、商品名・価格・画像が表示される' do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 詳細ページへ遷移する
+      visit search_goods_path
+      # 入力フォームへ入力する
+      element_keyword_search = find(".keyword-search")
+      fill_in_keyword_search_good(@good, element_keyword_search)
+      # 検索ボタンをクリック
+      element_keyword_search.find('input[name="commit"]').click
+      # 検索結果のページに遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 商品名・価格・画像が表示されることを確認
+      expect(page).to have_content(@good.price)
+      expect(page).to have_content(@good.name)
+      expect(find('img.item-img')[:src]).to include(@good.images.blobs[0].filename.to_s)
+      # 「該当する商品はありません」と表示されていないことを確認
+      expect(page).to have_no_content('該当する商品はありません')
+    end
+    it '検索条件が一致していないと、「該当する商品はありません」と表示される' do
+      # 入力フォームに入力するインスタンスを生成する
+      @good_search_input = FactoryBot.build(:good)
+      @good_search_input.category_id = Category.where(id: 2..).sample.id while @good.category_id == @good_search_input.category_id
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 詳細ページへ遷移する
+      visit search_goods_path
+      # 入力フォームへ入力する
+      element_keyword_search = find(".keyword-search")
+      fill_in_keyword_search_good(@good_search_input, element_keyword_search)
+      # 検索ボタンをクリック
+      element_keyword_search.find('input[name="commit"]').click
+      # 検索結果のページに遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 「該当する商品はありません」と表示されることを確認
+      expect(page).to have_content('該当する商品はありません')
+    end
+  end
+  context 'カテゴリ検索ができるとき' do
+    it '検索条件が一致すると、商品名・価格・画像が表示される' do
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 詳細ページへ遷移する
+      visit search_goods_path
+      # 入力フォームへ入力する
+      element_category_search = find(".category-search")
+      fill_in_category_search_good(@good, element_category_search)
+      # 検索ボタンをクリック
+      element_category_search.find('input[name="commit"]').click
+      # 検索結果のページに遷移していることを確認
+      expect(current_path).to eq(search_result_goods_path)
+      # 商品名・価格・画像が表示されることを確認
+      expect(page).to have_content(@good.price)
+      expect(page).to have_content(@good.name)
+      expect(find('img.item-img')[:src]).to include(@good.images.blobs[0].filename.to_s)
+      # 「該当する商品はありません」と表示されていないことを確認
+      expect(page).to have_no_content('該当する商品はありません')
+    end
+    it '検索条件が一致していないと、「該当する商品はありません」と表示される' do
+      # 検索用入力フォーム
+      @good_search_input = FactoryBot.build(:good)
+      @good_search_input.category_id = Category.where(id: 2..).sample.id while @good.category_id == @good_search_input.category_id
+      # ログインする（トップページに遷移していることを確認済み）
+      login_user(@good.user)
+      # 詳細ページへ遷移する
+      visit search_goods_path
+      # 入力フォームへ入力する
+      element_category_search = find(".category-search")
+      fill_in_category_search_good(@good_search_input, element_category_search)
+      # 検索ボタンをクリック
+      element_category_search.find('input[name="commit"]').click
       # 検索結果のページに遷移していることを確認
       expect(current_path).to eq(search_result_goods_path)
       # 「該当する商品はありません」と表示されることを確認
@@ -610,9 +756,10 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      fill_in_search_good(@good)
+      element_detail_search = find('.detail-search')
+      fill_in_detail_search_good(@good, element_detail_search)
       # 検索ボタンをクリック
-      find('input[name="commit"]').click
+      element_detail_search.find('input[name="commit"]').click
       # 検索結果のページに遷移していることを確認
       expect(current_path).to eq(search_result_goods_path)
       # 商品の画像をクリック

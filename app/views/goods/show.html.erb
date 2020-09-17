@@ -96,10 +96,10 @@
     <%= link_to '後ろの商品 ＞', "/goods/#{@good_next.id}" , class:'change-item-btn' %>
   </div>
 
-  <%= search_form_for @p, url: search_result_goods_path do |f| %>
+  <%= search_form_for @p, url: search_result_goods_path, class: "good-search" do |f| %>
   <% f.label :category_id, 'カテゴリ' %>
     <%= button_tag type: :submit, class: "another-item" do %>
-      <div><%= "#{Category.find(@good.category_id).name}カテゴリーの商品をもっと見る" %></div>
+      <%= "#{Category.find(@good.category_id).name}カテゴリーの商品をもっと見る" %>
       <% f.radio_button :category_id_eq, @good.category_id %>
     <% end %>
   <% end %>

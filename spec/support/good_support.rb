@@ -38,11 +38,22 @@ module GoodSupport
     expect(good_detail[5]).to have_content(DeliveryDay.find(good.delivery_days_id).name)
   end
 
-  def fill_in_search_good(good)
-    select Category.find(good.category_id).name, from: 'q[category_id_eq]'
-    select GoodStatus.find(good.status_id).name, from: 'q[status_id_eq]'
-    select DeliveryDay.find(good.delivery_days_id).name, from: 'q[delivery_days_id_eq]'
-    choose search_price_condition(good.price)
+  # 詳細検索フォームへの入力
+  def fill_in_detail_search_good(good, element)
+    element.select Category.find(good.category_id).name, from: 'q[category_id_eq]'
+    element.select GoodStatus.find(good.status_id).name, from: 'q[status_id_eq]'
+    element.select DeliveryDay.find(good.delivery_days_id).name, from: 'q[delivery_days_id_eq]'
+    element.choose search_price_condition(good.price)
+  end
+
+  # キーワード検索フォームへの入力
+  def fill_in_keyword_search_good(good, element)
+    element.fill_in 'q_name_cont', with: good.name.slice(10..20)
+  end
+
+  # カテゴリ検索フォームへの入力
+  def fill_in_category_search_good(good, element)
+    element.select Category.find(good.category_id).name, from: 'q[category_id_eq]'
   end
 
   private
