@@ -224,17 +224,17 @@ RSpec.describe '商品詳細表示機能', type: :system do
       visit good_path(@goods[0])
       n_good.times do |i|
         # 次の商品の詳細ページへのリンクをクリック
-        find_link("後ろの商品").click
+        find_link('後ろの商品').click
         # 次の商品に遷移できていることを確認
-        next_good_int = (i+1) % n_good
-        expect(current_path).to eq( good_path(@goods[next_good_int]) )
+        next_good_int = (i + 1) % n_good
+        expect(current_path).to eq(good_path(@goods[next_good_int]))
       end
       n_good.times do |i|
         # 前の商品の詳細ページへのリンクをクリック
-        find_link("前の商品").click
+        find_link('前の商品').click
         # 前の商品に遷移できていることを確認
-        prev_good_int = (n_good-i-1) % n_good
-        expect(current_path).to eq( good_path(@goods[prev_good_int]) )
+        prev_good_int = (n_good - i - 1) % n_good
+        expect(current_path).to eq(good_path(@goods[prev_good_int]))
       end
     end
   end
@@ -595,7 +595,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 商品詳細ページを訪問
       visit good_path(@good)
       # カテゴリボタンをクリック
-      find("button.another-item").click
+      find('button.another-item').click
       # 検索結果のページへ遷移していることを確認
       expect(current_path).to eq(search_result_goods_path)
       # 登録済みの商品が表示されている
@@ -627,7 +627,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_detail_search = find(".detail-search")
+      element_detail_search = find('.detail-search')
       fill_in_detail_search_good(@good, element_detail_search)
       # 検索ボタンをクリック
       element_detail_search.find('input[name="commit"]').click
@@ -649,7 +649,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_detail_search = find(".detail-search")
+      element_detail_search = find('.detail-search')
       fill_in_detail_search_good(@good_search_input, element_detail_search)
       # 検索ボタンをクリック
       element_detail_search.find('input[name="commit"]').click
@@ -666,7 +666,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_keyword_search = find(".keyword-search")
+      element_keyword_search = find('.keyword-search')
       fill_in_keyword_search_good(@good, element_keyword_search)
       # 検索ボタンをクリック
       element_keyword_search.find('input[name="commit"]').click
@@ -688,7 +688,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_keyword_search = find(".keyword-search")
+      element_keyword_search = find('.keyword-search')
       fill_in_keyword_search_good(@good_search_input, element_keyword_search)
       # 検索ボタンをクリック
       element_keyword_search.find('input[name="commit"]').click
@@ -705,7 +705,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_category_search = find(".category-search")
+      element_category_search = find('.category-search')
       fill_in_category_search_good(@good, element_category_search)
       # 検索ボタンをクリック
       element_category_search.find('input[name="commit"]').click
@@ -727,7 +727,7 @@ RSpec.describe '商品検索機能', type: :system do
       # 詳細ページへ遷移する
       visit search_goods_path
       # 入力フォームへ入力する
-      element_category_search = find(".category-search")
+      element_category_search = find('.category-search')
       fill_in_category_search_good(@good_search_input, element_category_search)
       # 検索ボタンをクリック
       element_category_search.find('input[name="commit"]').click
