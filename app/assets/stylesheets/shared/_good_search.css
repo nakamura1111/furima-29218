@@ -1,0 +1,57 @@
+/* 商品検索全体の箱 */
+.search{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: lightblue;
+}
+/* /商品検索全体の箱 */
+
+/* 商品検索のタイトル */
+
+.search-title{
+  width: 80%;
+  text-align: center;
+  padding: 10px;
+}
+.search-title>h1{
+  font-size: 40px;
+  font-weight: bold;
+}
+/* /商品検索のタイトル */
+
+/* 詳細商品検索 */
+.detail-search{
+  width: 80%;
+  padding: 10px;
+}
+.detail-search>h2{
+  font-size: 30px;
+  font-weight: bold;
+}
+/* /詳細商品検索 */
+
+/* キーワード商品検索 */
+.keyword-search{
+  width: 80%;
+  padding: 10px;
+}
+.keyword-search>h2{
+  font-size: 30px;
+  font-weight: bold;
+}
+.keyword-input-form{
+  width: 100%
+}
+/* /キーワード商品検索 */
+
+/* カテゴリ商品検索 */
+.category-search{
+  width: 80%;
+  padding: 10px;
+}
+.category-search>h2{
+  font-size: 30px;
+  font-weight: bold;
+}
+/* /カテゴリ商品検索 */

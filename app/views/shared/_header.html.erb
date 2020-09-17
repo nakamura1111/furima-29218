@@ -2,17 +2,34 @@
 <header class='top-page-header'>
   <div class='search-bar-contents'>
     <%= link_to image_tag("furima-logo-color.png", class:"furima-icon"), "/" %>
-    <form class="search-form" action="#">
+
+    <%= search_form_for @p, url: search_result_goods_path, class: "search-form" do |f| %>
+    <%= f.text_area :name_cont, class: 'input-box', placeholder: 'キーワードから探す' %>
+    <%= button_tag type: :submit, class: "search-button" do %>
+      <%= image_tag "search.png", class: "search-icon" %>
+    <% end %>
+    <% end %> 
+
+    <%
+=begin%>
+ <form class="search-form" action="#">
       <input class='input-box' placeholder='キーワードから探す'>
       <button class="search-button">
         <%= image_tag "search.png", class:"search-icon" %>
       </button>
-    </form>
+    </form>   
+<%
+=end%>
+
   </div>
   <div class='nav'>
     <ul class='lists-left'>
-      <li><%= link_to 'カテゴリー', "#", class: "category-list" %></li>
-      <li><%= link_to 'ブランド', "#", class: "brand-list" %></li>
+      <li>
+        <%#= link_to 'カテゴリー', "#", class: "category-list" %>
+        <div class="category-list" id="category-lists">カテゴリー</div>
+      </li>
+      <li><%= link_to '詳細検索', search_goods_path, class: "search-list" %></li>
+
     </ul>
     <ul class='lists-right'>
       <% if user_signed_in? %>
@@ -23,5 +40,18 @@
         <li><%= link_to '新規登録', new_user_registration_path, class: "sign-up" %></li>
       <% end %>
     </ul>
+  </div>
+  <div class="hidden" id="pull-down" >
+    <div class="show-lists">
+      <%= search_form_for @p, url: search_result_goods_path do |f| %>
+      <% Category.where(id: 2..).each do |category| %>
+      <% f.label :category_id, 'カテゴリ' %>
+      <%= button_tag type: :submit, class: "category-select-btn", id: "btn#{category.id}" do %>
+        <div class="pull-down-list"><%= category.name %></div>
+        <% f.radio_button :category_id_eq, category.id %>
+      <% end %>
+      <% end %>
+      <% end %>
+    </div>
   </div>
 </header>

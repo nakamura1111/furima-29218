@@ -1,9 +1,10 @@
 class GoodsController < ApplicationController
-  before_action :move_to_login, except: [:index, :show]
+  before_action :move_to_login, except: [:index, :show, :search, :search_result]
   before_action :current_good,  only: [:show, :destroy, :edit, :update]
+  before_action :search_good, only: [:search, :search_result, :index, :show]
 
   def index
-    @goods = Good.all.order('created_at DESC').includes(:user)
+    @goods = Good.order('created_at DESC').first(10)
   end
 
   def new
@@ -29,6 +30,8 @@ class GoodsController < ApplicationController
   end
 
   def show
+    previous_good
+    next_good
   end
 
   def destroy
@@ -40,16 +43,23 @@ class GoodsController < ApplicationController
   end
 
   def edit
-    redirect_to(root_url) unless (current_user == @good.user && @good.buy_history == nil)
+    redirect_to(root_url) unless current_user == @good.user && @good.buy_history.nil?
   end
 
   def update
-    params[:images] = @good.images  if params[:images] == nil
+    params[:images] = @good.images if params[:images].nil?
     if @good.update(good_params)
-      redirect_to action: "show", id: @good.id
+      redirect_to action: 'show', id: @good.id
     else
       render :edit
     end
+  end
+
+  def search
+  end
+
+  def search_result
+    @results = @p.result # includes
   end
 
   private
@@ -70,4 +80,18 @@ class GoodsController < ApplicationController
     @good = Good.find(params[:id])
   end
 
+  def previous_good
+    @good_prev = Good.where('id < ?', params[:id]).last
+    @good_prev = Good.last if @good_prev.nil?
+  end
+
+  def next_good
+    @good_next = Good.where('id > ?', params[:id]).first
+    @good_next = Good.first if @good_next.nil?
+  end
+
+  # ransack専用の、検索に特化したオブジェクトを生成(カラムの末尾に検索方法を追記する)
+  def search_good
+    @p = Good.ransack(params[:q])
+  end
 end

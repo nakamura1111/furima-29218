@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :buys, only: [:index, :create]
     collection do
       get 'profit_calc'
+      get 'search'
+      get 'search_result'
     end
   end
 end

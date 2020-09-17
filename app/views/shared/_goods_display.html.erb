@@ -1,0 +1,26 @@
+<%# CSS・・・assets/stylesheets/good/index.css %>
+<li class='list'>
+  <%= link_to good_path(good) do %>
+  <div class='item-img-content'>
+    <%= image_tag good.images[0].variant(resize:'500x500'), class: "item-img" %>
+    <% if good.buy_history != nil %>
+    <div class='sold-out'>
+      <span>Sold Out!!</span>
+    </div>
+    <% end %>
+  </div>
+  <div class='item-info'>
+    <h3 class='item-name'>
+      <%= good.name %>
+    </h3>
+    <div class='item-price'>
+      <span><%= good.price %>円<br>(税込み)</span>
+      <div class='star-btn'>
+        <%= image_tag "star.png", class:"star-icon" %>
+        <span class='star-count'>0</span>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</li>
+     

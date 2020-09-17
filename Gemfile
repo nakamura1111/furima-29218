@@ -61,18 +61,20 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-
+# デバッグ用　binding.pry
 gem 'pry-rails'
-
+# ユーザ管理機能の作成
 gem 'devise'
-
+# カテゴリ用のモデル作成
 gem 'active_hash'
-
+# 画像添付機能
 gem 'mini_magick'
 gem 'image_processing', '~>1.2'
-
+# クレジットカードによる精算のAPI
 gem 'payjp'
-
+# Amazon 3S を利用するためのgem
 gem 'aws-sdk-s3', require: false
-
+# エラーメッセージの日本語化(多国籍化用gem)
 gem 'rails-i18n'
+# 検索機能の補助のためのgem
+gem 'ransack'

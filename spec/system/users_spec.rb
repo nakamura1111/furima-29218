@@ -5,7 +5,7 @@ RSpec.describe 'ユーザー新規登録', type: :system do
     @user = FactoryBot.build(:user)
   end
 
-  context 'ユーザー新規登録ができるとき' do 
+  context 'ユーザー新規登録ができるとき' do
     it '正しい情報を入力すればユーザー新規登録ができてトップページに移動する' do
       # トップページに移動する
       visit root_path
@@ -16,9 +16,9 @@ RSpec.describe 'ユーザー新規登録', type: :system do
       # ユーザー情報を入力する
       fill_in_new_user(@user)
       # サインアップボタンを押すとユーザーモデルのカウントが1上がる
-      expect{
+      expect do
         find('input[name="commit"]').click
-      }.to change{ User.count }.by(1)
+      end.to change { User.count }.by(1)
       # トップページへ遷移しているか確認
       expect(current_path).to eq root_path
       # ログアウトボタンが表示される
@@ -38,11 +38,11 @@ RSpec.describe 'ユーザー新規登録', type: :system do
       expect(current_path).to eq(new_user_registration_path)
       # ユーザー情報を入力しない
       # サインアップボタンを押してもユーザーモデルのカウントは上がらない
-      expect{
+      expect do
         find('input[name="commit"]').click
-      }.to change{ User.count }.by(0)
+      end.to change { User.count }.by(0)
       # 新規登録ページへ戻されるか確認
-      expect(current_path).to eq(user_registration_path)        # 遷移先変わるらしい（deviseのソース確認してみよう）
+      expect(current_path).to eq(user_registration_path) # 遷移先変わるらしい（deviseのソース確認してみよう）
     end
   end
 end
@@ -82,8 +82,8 @@ RSpec.describe 'ログイン', type: :system do
       # 新規登録ページへ移動しているか確認
       expect(current_path).to eq(new_user_session_path)
       # ユーザー情報を入力する
-      fill_in 'email', with: ""
-      fill_in 'password', with: ""
+      fill_in 'email', with: ''
+      fill_in 'password', with: ''
       # ログインボタンを押す
       find('input[name="commit"]').click
       # ログインページへ戻される

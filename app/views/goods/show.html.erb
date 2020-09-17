@@ -92,14 +92,18 @@
     </form>
   </div>
   <div class="links">
-    <a href="#" class="change-item-btn">
-      ＜ 前の商品
-    </a>
-    <a href="#" class="change-item-btn">
-      後ろの商品 ＞
-    </a>
+    <%= link_to '＜ 前の商品', "/goods/#{@good_prev.id}" , class:'change-item-btn' %>
+    <%= link_to '後ろの商品 ＞', "/goods/#{@good_next.id}" , class:'change-item-btn' %>
   </div>
-  <a href="#" class='another-item'><%= Category.find(@good.category_id).name %>カテゴリーの商品をもっと見る</a>
+
+  <%= search_form_for @p, url: search_result_goods_path, class: "good-search" do |f| %>
+  <% f.label :category_id, 'カテゴリ' %>
+    <%= button_tag type: :submit, class: "another-item" do %>
+      <%= "#{Category.find(@good.category_id).name}カテゴリーの商品をもっと見る" %>
+      <% f.radio_button :category_id_eq, @good.category_id %>
+    <% end %>
+  <% end %>
+  
 </div>
 
 <%= render "shared/footer" %>

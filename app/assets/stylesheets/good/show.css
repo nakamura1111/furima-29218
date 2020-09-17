@@ -200,6 +200,7 @@
   font-size: 30px;
   text-decoration: none;
   color: #3CCACE;
+  cursor: pointer;
 }
 
 .another-item {
@@ -209,4 +210,8 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 23px;
+  border: none;  /* 枠線を消す */
+  outline: none; /* クリックしたときに表示される枠線を消す */
+  background: transparent; /* 背景の灰色を消す */
+  cursor: pointer;
 }
